@@ -1,0 +1,76 @@
+{
+  "hash": "8c5efa47",
+  "configHash": "4278fd72",
+  "lockfileHash": "a7604c65",
+  "browserHash": "1916cbcf",
+  "optimized": {
+    "react-dom/client": {
+      "src": "../../node_modules/react-dom/client.js",
+      "file": "react-dom_client.js",
+      "fileHash": "b2ff47a9",
+      "needsInterop": true
+    },
+    "react-icons/bi": {
+      "src": "../../node_modules/react-icons/bi/index.mjs",
+      "file": "react-icons_bi.js",
+      "fileHash": "04f25a5a",
+      "needsInterop": false
+    },
+    "react-icons/fa": {
+      "src": "../../node_modules/react-icons/fa/index.mjs",
+      "file": "react-icons_fa.js",
+      "fileHash": "23c87526",
+      "needsInterop": false
+    },
+    "react-icons/fi": {
+      "src": "../../node_modules/react-icons/fi/index.mjs",
+      "file": "react-icons_fi.js",
+      "fileHash": "87297ad2",
+      "needsInterop": false
+    },
+    "react-icons/io": {
+      "src": "../../node_modules/react-icons/io/index.mjs",
+      "file": "react-icons_io.js",
+      "fileHash": "6350adef",
+      "needsInterop": false
+    },
+    "react-router-dom": {
+      "src": "../../node_modules/react-router-dom/dist/index.mjs",
+      "file": "react-router-dom.js",
+      "fileHash": "49bb4307",
+      "needsInterop": false
+    },
+    "react-toastify": {
+      "src": "../../node_modules/react-toastify/dist/index.mjs",
+      "file": "react-toastify.js",
+      "fileHash": "5528830f",
+      "needsInterop": false
+    },
+    "react": {
+      "src": "../../node_modules/react/index.js",
+      "file": "react.js",
+      "fileHash": "b1b1e37e",
+      "needsInterop": true
+    },
+    "react/jsx-dev-runtime": {
+      "src": "../../node_modules/react/jsx-dev-runtime.js",
+      "file": "react_jsx-dev-runtime.js",
+      "fileHash": "3f6c0ad0",
+      "needsInterop": true
+    }
+  },
+  "chunks": {
+    "iconBase-DV7DKDJw": {
+      "file": "iconBase-DV7DKDJw.js",
+      "isDynamicEntry": false
+    },
+    "react-CECw5MHl": {
+      "file": "react-CECw5MHl.js",
+      "isDynamicEntry": false
+    },
+    "react-dom-CyfnKOhl": {
+      "file": "react-dom-CyfnKOhl.js",
+      "isDynamicEntry": false
+    }
+  }
+}
