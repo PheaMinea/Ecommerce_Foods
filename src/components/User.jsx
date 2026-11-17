@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { FaEye, FaEyeSlash, FaCheckCircle, FaTimesCircle } from "react-icons/fa";
+import {
+  FiAlertCircle,
+  FiCheck,
+  FiCheckCircle,
+  FiEye,
+  FiEyeOff,
+} from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 
 const User = () => {
@@ -213,50 +219,100 @@ const User = () => {
     if (/[^a-zA-Z0-9]/.test(password)) strength++;
     
     const strengthText = ["Very Weak", "Weak", "Fair", "Good", "Strong"];
-    const strengthColors = ["bg-red-500", "bg-orange-500", "bg-yellow-500", "bg-green-500", "bg-emerald-500"];
-    
+    const strengthColors = [
+      "bg-red-500",
+      "bg-brand-strong",
+      "bg-brand",
+      "bg-emerald-500",
+      "bg-emerald-600",
+    ];
+
     return {
       strength: Math.min(strength, 5),
       text: strengthText[Math.min(strength - 1, 4)] || "",
-      color: strengthColors[Math.min(strength - 1, 4)] || "bg-gray-300"
+      color: strengthColors[Math.min(strength - 1, 4)] || "bg-line",
     };
   };
 
   const passwordStrength = isSignUp ? getPasswordStrength() : null;
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-50 via-amber-50 to-orange-100 px-4 pt-24 pb-8 sm:pt-28 sm:pb-12">
-      <div className="bg-white w-full max-w-lg rounded-3xl shadow-2xl p-6 sm:p-8 md:p-10 border border-orange-100">
-        {/* Header */}
-        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-gray-800 mb-2">
-          {isSignUp ? "Sign Up for" : "Login to"} <span className="text-orange-600">Foodie</span>
-        </h1>
-        <p className="text-center text-gray-500 text-sm mb-6">
-          {isSignUp ? "Create your account and start ordering" : "Welcome back! Please login to continue"}
-        </p>
-
-        {/* Success Message */}
-        {successMessage && (
-          <div className="mb-4 p-4 bg-green-50 border border-green-200 rounded-xl flex items-center gap-2 text-green-700">
-            <FaCheckCircle className="text-green-500" />
-            <span className="text-sm font-medium">{successMessage}</span>
+    <div className="min-h-screen bg-cream px-4 pb-16 pt-28 sm:px-6 lg:pt-32">
+      <div className="mx-auto grid max-w-5xl overflow-hidden rounded-3xl border border-line bg-white shadow-card lg:grid-cols-2">
+        {/* Brand panel */}
+        <aside className="hidden flex-col justify-between bg-ink p-10 lg:flex">
+          <div>
+            <p className="font-display text-2xl font-extrabold tracking-tight text-cream">
+              Foodie<span className="text-brand">.</span>
+            </p>
+            <h2 className="mt-12 font-display text-3xl font-extrabold leading-tight text-cream">
+              Good food is one sign-up away.
+            </h2>
+            <p className="mt-3 text-sm leading-relaxed text-cream/70">
+              Save your details once and check out in a couple of taps next
+              time.
+            </p>
+            <ul className="mt-8 space-y-3 text-sm text-cream/80">
+              <li className="flex items-center gap-2.5">
+                <FiCheck className="shrink-0 text-brand" /> Fresh dishes from
+                local kitchens
+              </li>
+              <li className="flex items-center gap-2.5">
+                <FiCheck className="shrink-0 text-brand" /> Free delivery on
+                orders over $25
+              </li>
+              <li className="flex items-center gap-2.5">
+                <FiCheck className="shrink-0 text-brand" /> Hot at your door in
+                about 35 minutes
+              </li>
+            </ul>
           </div>
-        )}
 
-        {/* General Error Message */}
-        {errors.general && (
-          <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-xl flex items-center gap-2 text-red-700">
-            <FaTimesCircle className="text-red-500" />
-            <span className="text-sm font-medium">{errors.general}</span>
+          <figure className="mt-12 rounded-2xl border border-white/10 bg-white/5 p-5">
+            <blockquote className="text-sm leading-relaxed text-cream/80">
+              “Ordered at 12:04. Eating by 12:38 — and it was still hot.”
+            </blockquote>
+            <figcaption className="mt-3 text-xs text-cream/50">
+              Sokha · Phnom Penh
+            </figcaption>
+          </figure>
+        </aside>
+
+        {/* Form panel */}
+        <div className="p-6 sm:p-8 md:p-10">
+          <div className="mb-6">
+            <h1 className="font-display text-2xl font-extrabold text-ink sm:text-3xl">
+              {isSignUp ? "Create your account" : "Welcome back"}
+            </h1>
+            <p className="mt-1 text-sm text-ink-muted">
+              {isSignUp
+                ? "Sign up to start ordering in under a minute."
+                : "Log in to pick up where you left off."}
+            </p>
           </div>
-        )}
+
+          {/* Success Message */}
+          {successMessage && (
+            <div className="mb-4 flex items-center gap-2.5 rounded-xl border border-brand/30 bg-brand-tint/40 p-4 text-ink">
+              <FiCheckCircle className="shrink-0 text-lg text-brand-deep" />
+              <span className="text-sm font-semibold">{successMessage}</span>
+            </div>
+          )}
+
+          {/* General Error Message */}
+          {errors.general && (
+            <div className="mb-4 flex items-center gap-2.5 rounded-xl border border-red-200 bg-red-50 p-4 text-red-700">
+              <FiAlertCircle className="shrink-0 text-lg" />
+              <span className="text-sm font-semibold">{errors.general}</span>
+            </div>
+          )}
 
         {/* Form */}
         <form className="flex flex-col space-y-4" onSubmit={handleSubmit}>
           {isSignUp && (
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-gray-700 font-semibold mb-1.5 text-sm">
+                <label className="block text-ink font-semibold mb-1.5 text-sm">
                   First Name <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -266,14 +322,14 @@ const User = () => {
                   onChange={handleChange}
                   placeholder="John"
                   className={`w-full border rounded-xl px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base focus:outline-none focus:ring-2 transition-all duration-200 ${
-                    errors.firstName ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-orange-500'
+                    errors.firstName ? 'border-red-500 focus:ring-red-500' : 'border-line focus:border-brand focus:ring-brand/30'
                   }`}
                 />
                 {errors.firstName && <p className="text-red-500 text-xs mt-1">{errors.firstName}</p>}
               </div>
 
               <div>
-                <label className="block text-gray-700 font-semibold mb-1.5 text-sm">
+                <label className="block text-ink font-semibold mb-1.5 text-sm">
                   Last Name <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -283,7 +339,7 @@ const User = () => {
                   onChange={handleChange}
                   placeholder="Doe"
                   className={`w-full border rounded-xl px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base focus:outline-none focus:ring-2 transition-all duration-200 ${
-                    errors.lastName ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-orange-500'
+                    errors.lastName ? 'border-red-500 focus:ring-red-500' : 'border-line focus:border-brand focus:ring-brand/30'
                   }`}
                 />
                 {errors.lastName && <p className="text-red-500 text-xs mt-1">{errors.lastName}</p>}
@@ -292,7 +348,7 @@ const User = () => {
           )}
 
           <div>
-            <label className="block text-gray-700 font-semibold mb-1.5 text-sm">
+            <label className="block text-ink font-semibold mb-1.5 text-sm">
               Email <span className="text-red-500">*</span>
             </label>
             <input
@@ -302,14 +358,14 @@ const User = () => {
               onChange={handleChange}
               placeholder="john.doe@example.com"
               className={`w-full border rounded-xl px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base focus:outline-none focus:ring-2 transition-all duration-200 ${
-                errors.email ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-orange-500'
+                errors.email ? 'border-red-500 focus:ring-red-500' : 'border-line focus:border-brand focus:ring-brand/30'
               }`}
             />
             {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
           </div>
 
           <div>
-            <label className="block text-gray-700 font-semibold mb-1.5 text-sm">
+            <label className="block text-ink font-semibold mb-1.5 text-sm">
               Password <span className="text-red-500">*</span>
             </label>
             <div className="relative">
@@ -320,15 +376,15 @@ const User = () => {
                 onChange={handleChange}
                 placeholder="Enter your password"
                 className={`w-full border rounded-xl px-3 sm:px-4 py-2.5 sm:py-3 pr-10 text-sm sm:text-base focus:outline-none focus:ring-2 transition-all duration-200 ${
-                  errors.password ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-orange-500'
+                  errors.password ? 'border-red-500 focus:ring-red-500' : 'border-line focus:border-brand focus:ring-brand/30'
                 }`}
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-orange-500 transition"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-ink-muted hover:text-brand-deep transition"
               >
-                {showPassword ? <FaEyeSlash /> : <FaEye />}
+                {showPassword ? <FiEyeOff /> : <FiEye />}
               </button>
             </div>
             {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password}</p>}
@@ -341,12 +397,12 @@ const User = () => {
                     <div
                       key={level}
                       className={`h-1.5 flex-1 rounded-full transition-all duration-300 ${
-                        level <= passwordStrength.strength ? passwordStrength.color : 'bg-gray-200'
+                        level <= passwordStrength.strength ? passwordStrength.color : 'bg-line'
                       }`}
                     ></div>
                   ))}
                 </div>
-                <p className="text-xs text-gray-600">
+                <p className="text-xs text-ink-soft">
                   Strength: <span className="font-semibold">{passwordStrength.text}</span>
                 </p>
               </div>
@@ -355,7 +411,7 @@ const User = () => {
 
           {isSignUp && (
             <div>
-              <label className="block text-gray-700 font-semibold mb-1.5 text-sm">
+              <label className="block text-ink font-semibold mb-1.5 text-sm">
                 Confirm Password <span className="text-red-500">*</span>
               </label>
               <div className="relative">
@@ -366,15 +422,15 @@ const User = () => {
                   onChange={handleChange}
                   placeholder="Confirm your password"
                   className={`w-full border rounded-xl px-3 sm:px-4 py-2.5 sm:py-3 pr-10 text-sm sm:text-base focus:outline-none focus:ring-2 transition-all duration-200 ${
-                    errors.confirmPassword ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-orange-500'
+                    errors.confirmPassword ? 'border-red-500 focus:ring-red-500' : 'border-line focus:border-brand focus:ring-brand/30'
                   }`}
                 />
                 <button
                   type="button"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-orange-500 transition"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-ink-muted hover:text-brand-deep transition"
                 >
-                  {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+                  {showConfirmPassword ? <FiEyeOff /> : <FiEye />}
                 </button>
               </div>
               {errors.confirmPassword && <p className="text-red-500 text-xs mt-1">{errors.confirmPassword}</p>}
@@ -383,7 +439,7 @@ const User = () => {
 
           {isSignUp && (
             <div>
-              <label className="block text-gray-700 font-semibold mb-1.5 text-sm">
+              <label className="block text-ink font-semibold mb-1.5 text-sm">
                 Phone (Optional)
               </label>
               <input
@@ -393,7 +449,7 @@ const User = () => {
                 onChange={handleChange}
                 placeholder="+855 12 345 678"
                 className={`w-full border rounded-xl px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base focus:outline-none focus:ring-2 transition-all duration-200 ${
-                  errors.phone ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-orange-500'
+                  errors.phone ? 'border-red-500 focus:ring-red-500' : 'border-line focus:border-brand focus:ring-brand/30'
                 }`}
               />
               {errors.phone && <p className="text-red-500 text-xs mt-1">{errors.phone}</p>}
@@ -403,33 +459,33 @@ const User = () => {
           {/* Submit Button */}
           <button
             type="submit"
-            className="mt-6 w-full bg-gradient-to-r from-orange-500 to-amber-500 text-white font-semibold py-3 sm:py-3.5 rounded-xl 
-                       text-sm sm:text-base hover:from-orange-600 hover:to-amber-600 active:scale-95 transition-all duration-200
-                       shadow-lg hover:shadow-xl"
+            className="mt-6 inline-flex h-12 w-full items-center justify-center rounded-xl bg-brand-strong text-sm font-bold text-white transition-colors hover:bg-brand-deep disabled:cursor-not-allowed disabled:opacity-60"
           >
-            {isSignUp ? "Create Account" : "Login"}
+            {isSignUp ? "Create account" : "Log in"}
           </button>
         </form>
 
         {/* Toggle Form */}
         <div className="text-center mt-6">
-          <p className="text-gray-600 text-sm">
+          <p className="text-ink-soft text-sm">
             {isSignUp ? "Already have an account?" : "Don't have an account?"}{" "}
             <button
               onClick={() => setIsSignUp(!isSignUp)}
-              className="text-orange-600 font-semibold hover:text-orange-700 hover:underline transition-colors duration-200"
+              className="text-brand-deep font-semibold hover:text-ink hover:underline transition-colors duration-200"
             >
               {isSignUp ? "Login" : "Sign Up"}
             </button>
           </p>
         </div>
 
-        {/* Additional Info for Sign Up */}
-        {isSignUp && (
-          <p className="text-xs text-gray-500 text-center mt-4">
-            By signing up, you agree to our Terms of Service and Privacy Policy
-          </p>
-        )}
+          {/* Additional Info for Sign Up */}
+          {isSignUp && (
+            <p className="mt-4 text-center text-xs text-ink-muted">
+              By signing up, you agree to our Terms of Service and Privacy
+              Policy.
+            </p>
+          )}
+        </div>
       </div>
     </div>
   );

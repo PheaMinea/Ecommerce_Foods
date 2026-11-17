@@ -14,10 +14,14 @@ const ProtectedRoute = ({ children }) => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-50 via-amber-50 to-orange-100">
+      <div className="grid min-h-screen place-items-center bg-cream px-4">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-orange-500 mx-auto mb-4"></div>
-          <p className="text-gray-600 font-medium">Loading...</p>
+          <div
+            role="status"
+            aria-label="Loading"
+            className="mx-auto h-12 w-12 animate-spin rounded-full border-2 border-line border-t-brand"
+          />
+          <p className="mt-4 text-sm font-medium text-ink-soft">Loading…</p>
         </div>
       </div>
     );

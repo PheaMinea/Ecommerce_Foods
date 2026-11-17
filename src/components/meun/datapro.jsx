@@ -1,5 +1,6 @@
 import React, { useRef, useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { FiClock, FiMinus, FiPlus, FiSearch } from "react-icons/fi";
 import { ShopContext } from "../ShopContext";
 import HeroBg from "../../assets/cheffood.jpg";
 import Food1 from "../../assets/Food1.png";
@@ -250,165 +251,210 @@ const MenuFood = () => {
   };
 
   return (
-    <div className="mt-[70px]">
-      {/* Hero Section */}
-      <div
-        className="relative w-full h-[80vh] flex flex-col justify-center items-center text-white text-center bg-cover bg-center"
-        style={{ backgroundImage: `url(${HeroBg})` }}
-      >
-        <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/70"></div>
-        <div className="relative z-10 max-w-2xl px-6">
-          <h1 className="text-4xl md:text-6xl font-extrabold mb-4">
-            🍕 Welcome to <span className="text-amber-400">Foodie Menu</span>
-          </h1>
-          <p className="text-xl mb-8 text-gray-200">
-            Discover {displayFoods.length}+ delicious food items
-          </p>
-          <button
-            onClick={scrollToMenu}
-            className="bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 px-8 py-3 rounded-full text-white font-semibold transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl"
-          >
-            Explore Menu
-          </button>
+    <div>
+      {/* Page header */}
+      <section className="bg-cream px-4 pb-12 pt-28 sm:px-6 lg:px-8 lg:pt-32">
+        <div className="mx-auto grid max-w-7xl items-center gap-10 lg:grid-cols-[1.05fr_0.95fr]">
+          <div>
+            <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-brand-deep">
+              The menu
+            </p>
+            <h1 className="mt-3 font-display text-4xl font-extrabold leading-tight text-ink sm:text-5xl">
+              Everything on the menu.
+            </h1>
+            <p className="mt-4 max-w-md text-base leading-relaxed text-ink-soft">
+              {displayFoods.length} dishes cooked to order — from slow-cooked
+              curries and wood-fired pizza to something sweet at the end.
+            </p>
+
+            <div className="mt-8 flex flex-wrap items-center gap-4">
+              <button
+                type="button"
+                onClick={scrollToMenu}
+                className="inline-flex h-12 items-center rounded-full bg-brand-strong px-6 text-sm font-bold text-white shadow-card transition-colors hover:bg-brand-deep"
+              >
+                Browse dishes
+              </button>
+              <span className="inline-flex items-center gap-2 text-sm text-ink-soft">
+                <FiClock className="text-brand-deep" /> About 35 min delivery
+              </span>
+            </div>
+          </div>
+
+          <div className="relative hidden lg:block">
+            <div className="overflow-hidden rounded-3xl border border-line shadow-card">
+              <img
+                src={HeroBg}
+                alt="Chef preparing a dish in the kitchen"
+                className="h-72 w-full object-cover"
+              />
+            </div>
+            <div className="absolute -bottom-5 -left-5 rounded-2xl border border-line bg-white px-5 py-4 shadow-lift">
+              <p className="font-display text-2xl font-extrabold tabular-nums text-ink">
+                {displayFoods.length}+
+              </p>
+              <p className="text-xs text-ink-muted">dishes available today</p>
+            </div>
+          </div>
         </div>
-      </div>
+      </section>
 
       {/* Food Menu Section */}
-      <div ref={menuRef} className="p-8 bg-gradient-to-b from-orange-50/30 to-amber-50/30 min-h-screen">
-        <div className="max-w-7xl mx-auto mb-8">
+      <section
+        ref={menuRef}
+        className="min-h-screen border-t border-line bg-cream px-4 py-12 sm:px-6 sm:py-16 lg:px-8"
+      >
+        <div className="mx-auto mb-8 max-w-7xl">
           {isSearchActive && searchTerm ? (
-            <div className="bg-gradient-to-r from-orange-50 to-amber-50 border-2 border-orange-200 rounded-xl p-5 mb-6 shadow-lg">
-              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
-                <div>
-                  <h2 className="text-2xl font-bold text-orange-800 mb-2 flex items-center gap-2">
-                    <span>🔍</span> Search Results
-                  </h2>
-                  <p className="text-orange-600">
-                    Showing {displayFoods.length} results for "{searchTerm}"
-                    {searchByField && searchByField !== "all" && ` in ${searchByField}`}
-                  </p>
-                </div>
-                <button
-                  onClick={handleClearSearch}
-                  className="bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white px-5 py-2.5 rounded-xl transition-all duration-300 shadow-md hover:shadow-lg hover:scale-105 font-semibold"
-                >
-                  Clear Search
-                </button>
+            <div className="flex flex-col gap-4 rounded-2xl border border-brand/30 bg-brand-tint/40 p-5 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <h2 className="flex items-center gap-2 font-display text-xl font-bold text-ink">
+                  <FiSearch className="text-brand-deep" /> Search results
+                </h2>
+                <p className="mt-1 text-sm text-ink-soft">
+                  Showing {displayFoods.length} results for “{searchTerm}”
+                  {searchByField &&
+                    searchByField !== "all" &&
+                    ` in ${searchByField}`}
+                </p>
               </div>
+              <button
+                type="button"
+                onClick={handleClearSearch}
+                className="inline-flex h-11 shrink-0 items-center justify-center rounded-full bg-ink px-5 text-sm font-bold text-cream transition-colors hover:bg-ink-soft"
+              >
+                Clear search
+              </button>
             </div>
           ) : (
-            <div className="text-center">
-              <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-2">
-                🍽️ Our Food Menu
-              </h2>
-              <p className="text-gray-600 text-base sm:text-lg">
-                Total {displayFoods.length} delicious items available
+            <div className="flex flex-wrap items-end justify-between gap-3">
+              <div>
+                <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-brand-deep">
+                  All dishes
+                </p>
+                <h2 className="mt-2 font-display text-2xl font-extrabold text-ink sm:text-3xl">
+                  Pick something good
+                </h2>
+              </div>
+              <p className="text-sm text-ink-muted">
+                {displayFoods.length} items
               </p>
             </div>
           )}
         </div>
 
         {/* Food Grid */}
-        <div className="max-w-7xl mx-auto grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div className="mx-auto grid max-w-7xl grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {displayFoods.length > 0 ? (
             displayFoods.map((food) => {
               const cartQuantity = getCartItemQuantity(food.id);
               const isInCartItem = isInCart(food.id);
 
               return (
-                <div
+                <article
                   key={food.id}
-                  className="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden hover:transform hover:-translate-y-2 border-2 border-orange-100 group"
+                  className="group flex flex-col overflow-hidden rounded-2xl border border-line bg-white shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-lift"
                 >
-                  <div className="relative bg-gradient-to-br from-orange-50 to-amber-50 p-3">
+                  <div className="relative bg-cream p-4">
                     <img
                       src={food.img || food.image}
                       alt={food.name}
-                      className="w-full h-48 object-contain group-hover:scale-110 transition-transform duration-500"
+                      className="h-44 w-full object-contain transition-transform duration-500 group-hover:scale-105"
                       onError={handleImageError}
                       loading="lazy"
                     />
                     {food.category && (
-                      <span className="absolute top-2 left-2 bg-gradient-to-r from-orange-500 to-amber-500 text-white px-3 py-1 rounded-full text-xs font-semibold shadow-lg">
+                      <span className="absolute left-3 top-3 rounded-full bg-white/95 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-ink-soft ring-1 ring-line">
                         {food.category}
                       </span>
                     )}
                     {cartQuantity > 0 && (
-                      <div className="absolute top-2 right-2 bg-gradient-to-r from-orange-500 to-amber-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold shadow-lg animate-pulse">
+                      <span className="absolute right-3 top-3 grid h-6 min-w-6 place-items-center rounded-full bg-brand-strong px-1.5 text-[11px] font-bold text-white ring-2 ring-cream">
                         {cartQuantity}
-                      </div>
+                      </span>
                     )}
                   </div>
-                  <div className="p-4 bg-gradient-to-b from-white to-orange-50/30">
-                    <h3 className="text-lg font-bold text-gray-800 mb-2 line-clamp-1 group-hover:text-orange-600 transition-colors duration-300">
+
+                  <div className="flex flex-1 flex-col p-4">
+                    <h3 className="font-display text-base font-bold leading-snug text-ink">
                       {food.name}
                     </h3>
                     {food.description && (
-                      <p className="text-gray-600 text-sm mb-3 line-clamp-2">
+                      <p className="mt-1.5 line-clamp-2 text-sm leading-relaxed text-ink-muted">
                         {food.description}
                       </p>
                     )}
-                    <div className="flex justify-between items-center mb-4">
-                      <span className="text-orange-600 font-bold text-xl bg-orange-50 px-3 py-1 rounded-lg">
+
+                    <div className="mt-auto flex items-center justify-between gap-3 pt-4">
+                      <span className="font-display text-lg font-bold tabular-nums text-ink">
                         ${parseFloat(food.price || 0).toFixed(2)}
                       </span>
-                      {food.code && (
-                        <span className="text-gray-500 text-xs bg-gray-100 px-2 py-1 rounded">#{food.code}</span>
+
+                      {isInCartItem ? (
+                        <div className="flex items-center gap-1.5">
+                          <button
+                            type="button"
+                            onClick={() => decreaseQuantity(food.id)}
+                            aria-label={`Remove one ${food.name}`}
+                            className="grid h-9 w-9 place-items-center rounded-full border border-line text-ink transition-colors hover:border-ink/25"
+                          >
+                            <FiMinus />
+                          </button>
+                          <span className="min-w-6 text-center text-sm font-bold tabular-nums text-ink">
+                            {cartQuantity}
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => increaseQuantity(food.id)}
+                            aria-label={`Add one ${food.name}`}
+                            className="grid h-9 w-9 place-items-center rounded-full bg-brand-strong text-white transition-colors hover:bg-brand-deep"
+                          >
+                            <FiPlus />
+                          </button>
+                        </div>
+                      ) : isLoggedIn ? (
+                        <button
+                          type="button"
+                          onClick={() => handleAddToCart(food)}
+                          className="inline-flex h-9 items-center gap-1.5 rounded-full bg-brand-strong px-3.5 text-sm font-bold text-white transition-colors hover:bg-brand-deep"
+                        >
+                          <FiPlus /> Add
+                        </button>
+                      ) : (
+                        <Link
+                          to="/user"
+                          className="inline-flex h-9 items-center rounded-full border border-line px-3.5 text-sm font-bold text-ink transition-colors hover:border-ink/20"
+                        >
+                          Log in
+                        </Link>
                       )}
                     </div>
-
-                    {isInCartItem ? (
-                      <div className="flex items-center justify-between gap-2">
-                        <button
-                          onClick={() => decreaseQuantity(food.id)}
-                          className="w-10 h-10 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-xl flex items-center justify-center hover:from-red-600 hover:to-red-700 hover:scale-110 transition-all duration-300 shadow-md font-bold text-lg"
-                        >
-                          -
-                        </button>
-                        <span className="flex-1 text-center font-bold text-orange-600 bg-orange-50 py-2 rounded-lg">
-                          {cartQuantity} in Cart
-                        </span>
-                        <button
-                          onClick={() => increaseQuantity(food.id)}
-                          className="w-10 h-10 bg-gradient-to-r from-orange-500 to-amber-500 text-white rounded-xl flex items-center justify-center hover:from-orange-600 hover:to-amber-600 hover:scale-110 transition-all duration-300 shadow-md font-bold text-lg"
-                        >
-                          +
-                        </button>
-                      </div>
-                    ) : (
-                      <button
-                        onClick={() => isLoggedIn && handleAddToCart(food)}
-                        disabled={!isLoggedIn}
-                        className={`w-full py-3 rounded-xl font-semibold transition-all duration-300 shadow-md ${
-                          isLoggedIn
-                            ? 'bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white transform hover:scale-105 hover:shadow-lg cursor-pointer'
-                            : 'bg-gray-300 text-gray-500 cursor-not-allowed opacity-60'
-                        }`}
-                        title={!isLoggedIn ? "Please login to add items to cart" : "Add to Cart"}
-                      >
-                        {isLoggedIn ? 'Add to Cart' : 'Login First'}
-                      </button>
-                    )}
                   </div>
-                </div>
+                </article>
               );
             })
           ) : (
-            <div className="col-span-full text-center py-12">
-              <div className="text-gray-500 text-lg">
-                <p className="text-2xl mb-2">😔 No items found</p>
-                <p>Try adjusting your search criteria</p>
-                <button
-                  onClick={handleClearSearch}
-                  className="mt-4 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white px-6 py-3 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 font-semibold"
-                >
-                  Show All Items
-                </button>
-              </div>
+            <div className="col-span-full flex flex-col items-center rounded-2xl border border-dashed border-line bg-white px-6 py-16 text-center">
+              <span className="grid h-14 w-14 place-items-center rounded-full bg-cream text-2xl text-ink-muted">
+                <FiSearch />
+              </span>
+              <p className="mt-4 font-display text-xl font-bold text-ink">
+                Nothing matched your search
+              </p>
+              <p className="mt-1 text-sm text-ink-muted">
+                Try a different dish name, category or ID.
+              </p>
+              <button
+                type="button"
+                onClick={handleClearSearch}
+                className="mt-5 inline-flex h-11 items-center rounded-full bg-brand-strong px-5 text-sm font-bold text-white transition-colors hover:bg-brand-deep"
+              >
+                Show all dishes
+              </button>
             </div>
           )}
         </div>
-      </div>
+      </section>
     </div>
   );
 };

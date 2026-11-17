@@ -1,9 +1,33 @@
 import React, { useContext, useEffect, useState } from "react";
-import { BiCart, BiUser } from "react-icons/bi";
-import { FaBars, FaTimes, FaSearch, FaSignOutAlt } from "react-icons/fa";
+import {
+  FiChevronLeft,
+  FiChevronRight,
+  FiLogOut,
+  FiMenu,
+  FiPlus,
+  FiSearch,
+  FiShoppingBag,
+  FiStar,
+  FiUser,
+  FiX,
+} from "react-icons/fi";
 import { ShopContext } from "./ShopContext";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
+
+const navLinks = [
+  { to: "/", label: "Home" },
+  { to: "/datapro", label: "Menu" },
+  { to: "/about", label: "About" },
+  { to: "/contact", label: "Contact" },
+];
+
+const searchFields = [
+  { value: "all", label: "All" },
+  { value: "name", label: "Name" },
+  { value: "category", label: "Category" },
+  { value: "id", label: "ID" },
+];
 
 const Navbar = () => {
   const {
@@ -16,7 +40,7 @@ const Navbar = () => {
     allProducts,
     addToCart,
     searchByField,
-    setSearchByField
+    setSearchByField,
   } = useContext(ShopContext);
 
   const [isScrolled, setIsScrolled] = useState(false);
@@ -32,7 +56,7 @@ const Navbar = () => {
   const location = useLocation();
 
   useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 80);
+    const handleScroll = () => setIsScrolled(window.scrollY > 8);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -40,15 +64,14 @@ const Navbar = () => {
   // Check if user is logged in
   useEffect(() => {
     const checkLoginStatus = () => {
-      const currentUser = localStorage.getItem('foodie_current_user');
+      const currentUser = localStorage.getItem("foodie_current_user");
       setIsLoggedIn(!!currentUser);
     };
 
     checkLoginStatus();
-    // Listen for storage changes
-    window.addEventListener('storage', checkLoginStatus);
-    
-    return () => window.removeEventListener('storage', checkLoginStatus);
+    window.addEventListener("storage", checkLoginStatus);
+
+    return () => window.removeEventListener("storage", checkLoginStatus);
   }, []);
 
   // Sync search input with global search term
@@ -90,9 +113,7 @@ const Navbar = () => {
 
     if (searchByField === "name" || searchByField === "all") {
       return allProducts
-        .filter((product) =>
-          product.name.toLowerCase().includes(lowercasedInput)
-        )
+        .filter((product) => product.name.toLowerCase().includes(lowercasedInput))
         .slice(0, 5);
     } else if (searchByField === "id") {
       const exactMatch = allProducts.find(
@@ -113,7 +134,7 @@ const Navbar = () => {
   // Perform search
   const performSearch = (searchText) => {
     const lowercasedText = searchText.toLowerCase();
-    
+
     if (searchByField === "id" && !isNaN(searchText)) {
       const byId = allProducts.find(
         (product) => product.id === parseInt(searchText)
@@ -142,14 +163,12 @@ const Navbar = () => {
     );
   };
 
-  // Show all menu items
   const showAllMenuItems = () => {
     setSearchInput("");
     clearSearch();
     if (location.pathname !== "/datapro") {
       navigate("/datapro");
     } else {
-      // If already on menu page, just clear search
       clearSearch();
     }
     setIsMobileMenuOpen(false);
@@ -161,30 +180,21 @@ const Navbar = () => {
       const results = performSearch(searchInput);
 
       if (results.length > 0) {
-        // Use the context search function to update global state
         searchProducts(searchInput, searchByField);
         activateSearch();
-        
-        // Navigate to menu page if not already there
+
         if (location.pathname !== "/datapro") {
           navigate("/datapro");
         }
-        
-        // Close mobile menu
+
         setIsMobileMenuOpen(false);
       } else {
-        const toastId = 'search-error';
+        const toastId = "search-error";
         if (!toast.isActive(toastId)) {
-          toast.error(`❌ No products found for "${searchInput}"`, {
+          toast.error(`No dishes found for “${searchInput}”`, {
             toastId,
             position: "top-center",
             autoClose: 3000,
-            style: {
-              background: 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)',
-              color: '#fff',
-              borderRadius: '12px',
-              fontWeight: '600',
-            },
           });
         }
       }
@@ -192,12 +202,12 @@ const Navbar = () => {
     setSearchSuggestions([]);
   };
 
-  // Quick search function for instant results
+  // Quick search for instant results
   const handleQuickSearch = (searchText, field = "name") => {
     setSearchInput(searchText);
     searchProducts(searchText, field);
     activateSearch();
-    
+
     if (location.pathname !== "/datapro") {
       navigate("/datapro");
     }
@@ -205,7 +215,6 @@ const Navbar = () => {
     setSearchSuggestions([]);
   };
 
-  // Navigation functions for single product view
   const nextProduct = () => {
     setCurrentProductIndex((prev) =>
       prev < searchResults.length - 1 ? prev + 1 : 0
@@ -244,8 +253,7 @@ const Navbar = () => {
   const handleSearchChange = (e) => {
     const value = e.target.value;
     setSearchInput(value);
-    
-    // Auto-search when user types (optional)
+
     if (value.trim().length > 2) {
       const results = performSearch(value);
       if (results.length > 0 && location.pathname === "/datapro") {
@@ -266,577 +274,520 @@ const Navbar = () => {
   const toggleSearchField = (field) => {
     setSearchByField(field);
     setSearchSuggestions([]);
-    
-    // If there's search input, perform search with new field
+
     if (searchInput.trim()) {
       handleQuickSearch(searchInput, field);
     }
   };
 
-  // Add to cart function
   const handleAddToCart = (product) => {
     addToCart(product);
-    // Toast notification is handled in ShopContext.addToCart
   };
 
-  // Logout function
   const handleLogout = () => {
-    localStorage.removeItem('foodie_current_user');
+    localStorage.removeItem("foodie_current_user");
     setIsLoggedIn(false);
-    toast.success('👋 Logged out successfully!', {
+    toast.success("You're logged out. See you soon!", {
       position: "top-center",
       autoClose: 2000,
     });
-    navigate('/user');
+    navigate("/user");
   };
 
-  // Get popular products
-  const getPopularProducts = () => {
-    return allProducts
+  const getPopularProducts = () =>
+    allProducts
       .filter((product) => product.popular)
       .slice(0, 3)
       .map((product) => ({ name: product.name, category: product.category }));
-  };
 
-  // Get unique categories
   const getPopularCategories = () => {
-    const categories = [...new Set(allProducts.map(product => product.category))];
+    const categories = [...new Set(allProducts.map((p) => p.category))];
     return categories.slice(0, 4);
   };
 
   const popularProducts = getPopularProducts();
   const popularCategories = getPopularCategories();
 
+  const openProduct = searchResults[currentProductIndex];
+
   return (
     <nav
-      className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${
-        isScrolled ? "bg-white shadow-md py-3" : "bg-transparent py-5"
+      className={`fixed inset-x-0 top-0 z-50 border-b transition-all duration-300 ${
+        isScrolled
+          ? "border-line bg-cream/90 shadow-[0_8px_24px_-20px_rgba(41,37,36,0.5)] backdrop-blur-md"
+          : "border-transparent bg-cream/80 backdrop-blur-md"
       }`}
     >
-      <div className="max-w-7xl mx-auto flex justify-between items-center px-4 md:px-8">
-        {/* Hamburger for Mobile */}
-        <div className="md:hidden">
-          <button 
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="p-2"
-          >
-            {isMobileMenuOpen ? (
-              <FaTimes className="text-2xl text-gray-800" />
-            ) : (
-              <FaBars className="text-2xl text-gray-800" />
-            )}
-          </button>
-        </div>
+      <div className="mx-auto flex h-20 max-w-7xl items-center gap-3 px-4 sm:px-6 lg:px-8">
+        {/* Mobile menu button */}
+        <button
+          type="button"
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          className="grid h-11 w-11 place-items-center rounded-xl text-ink transition-colors hover:bg-white md:hidden"
+          aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
+          aria-expanded={isMobileMenuOpen}
+        >
+          {isMobileMenuOpen ? (
+            <FiX className="text-2xl" />
+          ) : (
+            <FiMenu className="text-2xl" />
+          )}
+        </button>
 
-        {/* Logo */}
+        {/* Wordmark */}
         <Link
           to="/"
-          className="text-3xl font-extrabold text-orange-600 tracking-tight hover:text-orange-700 transition-colors"
+          className="font-display text-2xl font-extrabold tracking-tight text-ink"
           onClick={handleClearSearch}
         >
-          Foodie
+          Foodie<span className="text-brand">.</span>
         </Link>
 
-        {/* Desktop Menu */}
-        <ul className="hidden md:flex items-center space-x-8 text-base font-medium text-gray-700">
-          <Link
-            to="/"
-            className={`hover:text-orange-500 transition-colors ${
-              location.pathname === "/" 
-                ? "text-orange-600 font-bold border-b-2 border-orange-600 pb-1" 
-                : ""
-            }`}
-            onClick={handleClearSearch}
-          >
-            Home
-          </Link>
-          <Link
-            to="/about"
-            className={`hover:text-orange-500 transition-colors ${
-              location.pathname === "/about" 
-                ? "text-orange-600 font-bold border-b-2 border-orange-600 pb-1" 
-                : ""
-            }`}
-            onClick={handleClearSearch}
-          >
-            About
-          </Link>
-          <Link
-            to="/datapro"
-            className={`hover:text-orange-500 transition-colors ${
-              location.pathname === "/datapro" 
-                ? "text-orange-600 font-bold border-b-2 border-orange-600 pb-1" 
-                : ""
-            }`}
-            onClick={handleClearSearch}
-          >
-            Menu
-          </Link>
-          <Link
-            to="/contact"
-            className={`hover:text-orange-500 transition-colors ${
-              location.pathname === "/contact" 
-                ? "text-orange-600 font-bold border-b-2 border-orange-600 pb-1" 
-                : ""
-            }`}
-            onClick={handleClearSearch}
-          >
-            Contact
-          </Link>
-
-          {/* Search Input with Field Selection */}
-          <div className="relative">
-            <div className="flex items-center space-x-2">
-              {/* Search Input */}
-              <div className="relative">
-                <input
-                  type="search"
-                  placeholder={
-                    searchByField === "name" ? "Search by name..." :
-                    searchByField === "category" ? "Search by category..." :
-                    searchByField === "id" ? "Search by ID..." :
-                    "Search products..."
-                  }
-                  value={searchInput}
-                  onChange={handleSearchChange}
-                  onKeyPress={handleKeyPress}
-                  className="w-48 rounded-full border border-gray-300 py-2 pl-4 pr-10 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 transition"
-                />
-                <button
-                  onClick={handleSearch}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-orange-500 transition"
+        {/* Desktop links */}
+        <ul className="ml-6 hidden items-center gap-1 md:flex">
+          {navLinks.map((link) => {
+            const isActive =
+              link.to === "/"
+                ? location.pathname === "/" || location.pathname === "/home"
+                : location.pathname === link.to;
+            return (
+              <li key={link.to}>
+                <Link
+                  to={link.to}
+                  onClick={handleClearSearch}
+                  className={`inline-flex h-10 items-center rounded-full px-4 text-sm font-semibold transition-colors ${
+                    isActive
+                      ? "bg-white text-ink shadow-card"
+                      : "text-ink-soft hover:text-ink"
+                  }`}
                 >
-                  <FaSearch />
+                  {link.label}
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
+
+        {/* Actions */}
+        <div className="ml-auto flex items-center gap-1 sm:gap-2">
+          {/* Desktop search */}
+          <div className="relative mr-1 hidden lg:block">
+            <form onSubmit={handleSearch} className="relative">
+              <FiSearch className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-lg text-ink-muted" />
+              <input
+                type="search"
+                aria-label="Search dishes"
+                placeholder={
+                  searchByField === "name"
+                    ? "Search by name…"
+                    : searchByField === "category"
+                    ? "Search by category…"
+                    : searchByField === "id"
+                    ? "Search by ID…"
+                    : "Search dishes…"
+                }
+                value={searchInput}
+                onChange={handleSearchChange}
+                onKeyPress={handleKeyPress}
+                className="h-11 w-60 rounded-full border border-line bg-white pl-11 pr-10 text-sm text-ink placeholder:text-ink-muted focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/30 [&::-webkit-search-cancel-button]:hidden"
+              />
+              {searchInput && (
+                <button
+                  type="button"
+                  onClick={handleClearSearch}
+                  aria-label="Clear search"
+                  className="absolute right-3 top-1/2 grid h-6 w-6 -translate-y-1/2 place-items-center rounded-full text-ink-muted transition-colors hover:bg-cream hover:text-ink"
+                >
+                  <FiX />
                 </button>
-                {searchInput && (
-                  <button
-                    onClick={handleClearSearch}
-                    className="absolute right-8 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition text-lg"
-                  >
-                    ×
-                  </button>
-                )}
-              </div>
+              )}
+            </form>
 
-              {/* Show All Menu Button */}
-              <button
-                onClick={showAllMenuItems}
-                className="px-4 py-2 text-smtransition font-medium"
-                title={`Show all ${allProducts.length} menu items`}
-              >
-              </button>
-            </div>
-
-            {/* Search Suggestions */}
             {searchSuggestions.length > 0 && (
-              <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-300 rounded-lg shadow-lg z-50 max-h-60 overflow-y-auto">
+              <div className="absolute left-0 right-0 top-full z-50 mt-2 overflow-hidden rounded-2xl border border-line bg-white p-1.5 shadow-lift">
                 {searchSuggestions.map((product) => (
                   <div
                     key={product.id}
-                    className="border-b border-gray-100 last:border-b-0"
+                    className="rounded-xl transition-colors hover:bg-cream"
                   >
-                    <div
+                    <button
+                      type="button"
                       onClick={() => handleSuggestionClick(product)}
-                      className="px-4 py-3 hover:bg-orange-50 cursor-pointer transition-colors"
+                      className="block w-full px-3 py-2.5 text-left"
                     >
-                      <div className="font-medium text-gray-800">
+                      <span className="block text-sm font-semibold text-ink">
                         {product.name}
-                      </div>
-                      <div className="text-xs text-gray-500">
-                        ${product.price} • {product.category}
-                      </div>
-                    </div>
-
-                    {/* Quick View Button */}
-                    <div className="px-4 py-2 border-t border-gray-100 bg-gray-50">
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleQuickView(product);
-                        }}
-                        className="w-full text-xs text-center text-orange-500 hover:text-orange-700 font-medium py-1 transition-colors"
-                      >
-                        Quick View
-                      </button>
-                    </div>
+                      </span>
+                      <span className="block text-xs text-ink-muted">
+                        ${product.price} · {product.category}
+                      </span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleQuickView(product);
+                      }}
+                      className="mb-1 ml-3 inline-flex items-center gap-1 text-xs font-semibold text-brand-deep hover:text-ink"
+                    >
+                      Quick view <FiChevronRight />
+                    </button>
                   </div>
                 ))}
               </div>
             )}
           </div>
-        </ul>
 
-        {/* Icons */}
-        <div className="flex items-center space-x-4 md:space-x-6">
-          <Link to="/cart" onClick={handleClearSearch}>
-            <div className="relative">
-              <BiCart className="text-2xl md:text-3xl cursor-pointer hover:text-orange-500 transition-colors" />
-              {quantity > 0 && (
-                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
-                  {quantity}
-                </span>
-              )}
-            </div>
+          <Link
+            to="/cart"
+            onClick={handleClearSearch}
+            className="relative grid h-11 w-11 place-items-center rounded-xl text-ink transition-colors hover:bg-white"
+            aria-label={`Cart, ${quantity} items`}
+          >
+            <FiShoppingBag className="text-xl" />
+            {quantity > 0 && (
+              <span className="absolute right-0.5 top-0.5 grid h-5 min-w-[1.25rem] place-items-center rounded-full bg-brand-strong px-1 text-[11px] font-bold text-white ring-2 ring-cream">
+                {quantity}
+              </span>
+            )}
           </Link>
 
-          <Link to={isLoggedIn ? "/profile" : "/user"} onClick={handleClearSearch}>
-            <BiUser className="text-2xl md:text-3xl cursor-pointer hover:text-orange-500 transition-colors" />
+          <Link
+            to={isLoggedIn ? "/profile" : "/user"}
+            onClick={handleClearSearch}
+            className="grid h-11 w-11 place-items-center rounded-xl text-ink transition-colors hover:bg-white"
+            aria-label={isLoggedIn ? "Your profile" : "Log in"}
+          >
+            <FiUser className="text-xl" />
           </Link>
 
           {isLoggedIn && (
             <button
+              type="button"
               onClick={handleLogout}
-              className="text-2xl md:text-3xl cursor-pointer hover:text-red-500 transition-colors"
-              title="Logout"
+              className="hidden h-11 w-11 place-items-center rounded-xl text-ink-soft transition-colors hover:bg-white hover:text-brand-deep sm:grid"
+              title="Log out"
+              aria-label="Log out"
             >
-              <FaSignOutAlt />
+              <FiLogOut className="text-lg" />
             </button>
           )}
         </div>
       </div>
 
-      {/* Mobile Dropdown Menu */}
+      {/* Mobile sheet */}
       {isMobileMenuOpen && (
-        <div className="md:hidden bg-white shadow-lg py-4 px-6 space-y-4">
-          <Link
-            to="/"
-            className={`block text-lg font-medium py-2 transition-colors ${
-              location.pathname === "/" 
-                ? "text-orange-600 font-bold bg-orange-50 px-3 rounded-lg" 
-                : "text-gray-800 hover:text-orange-500"
-            }`}
-            onClick={() => {
-              setIsMobileMenuOpen(false);
-              handleClearSearch();
-            }}
-          >
-            Home
-          </Link>
-          <Link
-            to="/about"
-            className={`block text-lg font-medium py-2 transition-colors ${
-              location.pathname === "/about" 
-                ? "text-orange-600 font-bold bg-orange-50 px-3 rounded-lg" 
-                : "text-gray-800 hover:text-orange-500"
-            }`}
-            onClick={() => {
-              setIsMobileMenuOpen(false);
-              handleClearSearch();
-            }}
-          >
-            About
-          </Link>
-          <Link
-            to="/datapro"
-            className={`block text-lg font-medium py-2 transition-colors ${
-              location.pathname === "/datapro" 
-                ? "text-orange-600 font-bold bg-orange-50 px-3 rounded-lg" 
-                : "text-gray-800 hover:text-orange-500"
-            }`}
-            onClick={() => {
-              setIsMobileMenuOpen(false);
-              handleClearSearch();
-            }}
-          >
-            Menu
-          </Link>
-          <Link
-            to="/contact"
-            className={`block text-lg font-medium py-2 transition-colors ${
-              location.pathname === "/contact" 
-                ? "text-orange-600 font-bold bg-orange-50 px-3 rounded-lg" 
-                : "text-gray-800 hover:text-orange-500"
-            }`}
-            onClick={() => {
-              setIsMobileMenuOpen(false);
-              handleClearSearch();
-            }}
-          >
-            Contact
-          </Link>
-
-          {/* Show All Menu Button for Mobile */}
-          <div className="pt-2">
-            <button
-              onClick={showAllMenuItems}
-              className="w-full px-4 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition font-medium text-base"
-            >
-              Show All Menu Items ({allProducts.length})
-            </button>
-          </div>
-
-          {/* Mobile Search */}
-          <div className="relative pt-4">
-            <div className="flex items-center space-x-2 mb-3">
-              <span className="text-sm text-gray-600 font-medium">Search by:</span>
-              <select
-                value={searchByField}
-                onChange={(e) => toggleSearchField(e.target.value)}
-                className="px-3 py-1 text-xs bg-orange-500 text-white rounded-full hover:bg-orange-600 transition font-medium"
-              >
-                <option value="all">All</option>
-                <option value="name">Name</option>
-                <option value="category">Category</option>
-                <option value="id">ID</option>
-              </select>
-            </div>
-
-            <form onSubmit={handleSearch} className="relative">
-              <input
-                type="search"
-                placeholder={
-                  searchByField === "name" ? "Search by name..." :
-                  searchByField === "category" ? "Search by category..." :
-                  searchByField === "id" ? "Search by ID..." :
-                  "Search products..."
-                }
-                value={searchInput}
-                onChange={handleSearchChange}
-                onKeyPress={handleKeyPress}
-                className="w-full rounded-full border border-gray-300 py-3 pl-4 pr-12 text-base focus:outline-none focus:ring-2 focus:ring-orange-500"
-              />
+        <div className="max-h-[calc(100vh-5rem)] overflow-y-auto border-t border-line bg-cream px-4 pb-8 pt-5 md:hidden">
+          <form onSubmit={handleSearch} className="relative">
+            <FiSearch className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-lg text-ink-muted" />
+            <input
+              type="search"
+              aria-label="Search dishes"
+              placeholder="Search dishes…"
+              value={searchInput}
+              onChange={handleSearchChange}
+              onKeyPress={handleKeyPress}
+              className="h-12 w-full rounded-full border border-line bg-white pl-11 pr-12 text-sm text-ink placeholder:text-ink-muted focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/30 [&::-webkit-search-cancel-button]:hidden"
+            />
+            {searchInput && (
               <button
-                type="submit"
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-orange-500 transition"
+                type="button"
+                onClick={handleClearSearch}
+                aria-label="Clear search"
+                className="absolute right-3 top-1/2 grid h-7 w-7 -translate-y-1/2 place-items-center rounded-full text-ink-muted hover:bg-cream hover:text-ink"
               >
-                <FaSearch />
+                <FiX />
               </button>
-              {searchInput && (
+            )}
+          </form>
+
+          <div className="mt-3 flex items-center gap-2">
+            <span className="text-xs font-semibold uppercase tracking-wide text-ink-muted">
+              Search by
+            </span>
+            <div className="flex flex-wrap gap-1.5">
+              {searchFields.map((field) => (
                 <button
+                  key={field.value}
                   type="button"
-                  onClick={handleClearSearch}
-                  className="absolute right-10 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition text-lg"
+                  onClick={() => toggleSearchField(field.value)}
+                  className={`rounded-full px-3 py-1.5 text-xs font-semibold transition-colors ${
+                    searchByField === field.value
+                      ? "bg-ink text-cream"
+                      : "border border-line bg-white text-ink-soft hover:text-ink"
+                  }`}
                 >
-                  ×
+                  {field.label}
                 </button>
-              )}
-            </form>
-
-            {/* Mobile Search Suggestions */}
-            {searchSuggestions.length > 0 && (
-              <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg z-50 max-h-60 overflow-y-auto">
-                {searchSuggestions.map((product) => (
-                  <div
-                    key={product.id}
-                    className="border-b border-gray-100 last:border-b-0"
-                  >
-                    <div
-                      onClick={() => handleSuggestionClick(product)}
-                      className="px-4 py-3 hover:bg-orange-50 cursor-pointer transition-colors"
-                    >
-                      <div className="font-medium text-gray-800">
-                        {product.name}
-                      </div>
-                      <div className="text-xs text-gray-500">
-                        ${product.price} • {product.category}
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
+              ))}
+            </div>
           </div>
 
-          {/* Popular Searches */}
-          <div className="space-y-4 pt-4">
-            {popularProducts.length > 0 && (
-              <div className="text-sm text-gray-600">
-                <div className="font-medium mb-2">Popular Items:</div>
-                <div className="flex flex-wrap gap-2">
-                  {popularProducts.map((product, index) => (
-                    <span
-                      key={index}
-                      onClick={() => handleQuickSearch(product.name, "name")}
-                      className="px-3 py-1 bg-gray-100 rounded-full cursor-pointer hover:bg-orange-100 transition-colors text-xs"
-                    >
-                      {product.name}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {popularCategories.length > 0 && (
-              <div className="text-sm text-gray-600">
-                <div className="font-medium mb-2">Categories:</div>
-                <div className="flex flex-wrap gap-2">
-                  {popularCategories.map((category, index) => (
-                    <span
-                      key={index}
-                      onClick={() => handleQuickSearch(category, "category")}
-                      className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full cursor-pointer hover:bg-blue-200 transition-colors text-xs"
-                    >
-                      {category}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* Show current search term in mobile */}
-          {isSearchActive && searchTerm && (
-            <div className="text-sm text-gray-600 pt-2 border-t">
-              <div className="flex justify-between items-center">
-                <span>
-                  Active search: "<span className="font-medium">{searchTerm}</span>"
-                </span>
-                <button 
-                  onClick={handleClearSearch}
-                  className="text-orange-500 hover:text-orange-700 text-xs font-medium"
+          {searchSuggestions.length > 0 && (
+            <div className="mt-2 overflow-hidden rounded-2xl border border-line bg-white">
+              {searchSuggestions.map((product) => (
+                <button
+                  key={product.id}
+                  type="button"
+                  onClick={() => handleSuggestionClick(product)}
+                  className="block w-full border-b border-line px-4 py-3 text-left last:border-b-0 hover:bg-cream"
                 >
-                  Clear
+                  <span className="block text-sm font-semibold text-ink">
+                    {product.name}
+                  </span>
+                  <span className="block text-xs text-ink-muted">
+                    ${product.price} · {product.category}
+                  </span>
                 </button>
-              </div>
+              ))}
             </div>
           )}
 
-          {/* Mobile Logout Button */}
-          {isLoggedIn && (
-            <div className="pt-4 border-t mt-4">
+          <ul className="mt-5 space-y-1">
+            {navLinks.map((link) => {
+              const isActive =
+                link.to === "/"
+                  ? location.pathname === "/" || location.pathname === "/home"
+                  : location.pathname === link.to;
+              return (
+                <li key={link.to}>
+                  <Link
+                    to={link.to}
+                    onClick={() => {
+                      setIsMobileMenuOpen(false);
+                      handleClearSearch();
+                    }}
+                    className={`flex h-12 items-center rounded-xl px-4 text-base font-semibold transition-colors ${
+                      isActive
+                        ? "bg-white text-ink shadow-card"
+                        : "text-ink-soft hover:bg-white hover:text-ink"
+                    }`}
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+
+          <button
+            type="button"
+            onClick={showAllMenuItems}
+            className="mt-4 inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-brand-strong text-sm font-bold text-white transition-colors hover:bg-brand-deep"
+          >
+            Browse all {allProducts.length} dishes
+          </button>
+
+          {isSearchActive && searchTerm && (
+            <div className="mt-5 flex items-center justify-between rounded-xl border border-line bg-white px-4 py-3">
+              <span className="text-sm text-ink-soft">
+                Searching for{" "}
+                <span className="font-semibold text-ink">{searchTerm}</span>
+              </span>
               <button
-                onClick={() => {
-                  setIsMobileMenuOpen(false);
-                  handleLogout();
-                }}
-                className="w-full px-4 py-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transition font-medium text-base flex items-center justify-center gap-2"
+                type="button"
+                onClick={handleClearSearch}
+                className="text-xs font-bold text-brand-deep hover:text-ink"
               >
-                <FaSignOutAlt /> Logout
+                Clear
               </button>
             </div>
+          )}
+
+          {(popularProducts.length > 0 || popularCategories.length > 0) && (
+            <div className="mt-6 space-y-4">
+              {popularProducts.length > 0 && (
+                <div>
+                  <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-ink-muted">
+                    Popular now
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {popularProducts.map((product, index) => (
+                      <button
+                        key={index}
+                        type="button"
+                        onClick={() => handleQuickSearch(product.name, "name")}
+                        className="rounded-full border border-line bg-white px-3 py-1.5 text-xs font-medium text-ink-soft transition-colors hover:border-brand hover:text-ink"
+                      >
+                        {product.name}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {popularCategories.length > 0 && (
+                <div>
+                  <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-ink-muted">
+                    Categories
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {popularCategories.map((category, index) => (
+                      <button
+                        key={index}
+                        type="button"
+                        onClick={() => handleQuickSearch(category, "category")}
+                        className="rounded-full border border-line bg-white px-3 py-1.5 text-xs font-medium text-ink-soft transition-colors hover:border-brand hover:text-ink"
+                      >
+                        {category}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+          {isLoggedIn && (
+            <button
+              type="button"
+              onClick={() => {
+                setIsMobileMenuOpen(false);
+                handleLogout();
+              }}
+              className="mt-6 inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl border border-line bg-white text-sm font-semibold text-ink-soft transition-colors hover:text-brand-deep"
+            >
+              <FiLogOut /> Log out
+            </button>
           )}
         </div>
       )}
 
-      {/* Single Product Search View */}
-      {showSingleProduct && searchResults.length > 0 && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          {/* Background */}
-          <div
-            className="absolute inset-0 bg-black bg-opacity-70 backdrop-blur-sm"
+      {/* Quick view */}
+      {showSingleProduct && openProduct && (
+        <div className="fixed inset-0 z-[60] grid place-items-center p-4">
+          <button
+            type="button"
+            aria-label="Close quick view"
+            className="absolute inset-0 bg-ink/60 backdrop-blur-sm"
             onClick={closeSingleProductView}
-          ></div>
+          />
 
-          {/* Product Card */}
-          <div className="relative bg-gradient-to-br from-white via-orange-50/30 to-amber-50/30 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border-2 border-orange-200">
-            <div className="p-6">
-              <div className="flex justify-between items-start mb-4">
-                <h2 className="text-2xl font-bold text-gray-800">
-                  {searchResults[currentProductIndex].name}
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-label={`${openProduct.name} quick view`}
+            className="relative max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-3xl border border-line bg-white p-6 shadow-lift sm:p-8"
+          >
+            <div className="mb-5 flex items-start justify-between gap-4">
+              <div>
+                <p className="text-xs font-bold uppercase tracking-[0.14em] text-brand-deep">
+                  {openProduct.category || "Dish"}
+                </p>
+                <h2 className="mt-1 font-display text-2xl font-extrabold text-ink">
+                  {openProduct.name}
                 </h2>
-                <button
-                  onClick={closeSingleProductView}
-                  className="text-gray-400 hover:text-gray-600 text-2xl transition-colors"
-                >
-                  ×
-                </button>
+              </div>
+              <button
+                type="button"
+                onClick={closeSingleProductView}
+                aria-label="Close"
+                className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-line text-ink-soft transition-colors hover:bg-cream hover:text-ink"
+              >
+                <FiX />
+              </button>
+            </div>
+
+            {searchResults.length > 1 && (
+              <p className="mb-4 text-sm text-ink-muted">
+                Showing {currentProductIndex + 1} of {searchResults.length}
+                {searchInput && ` for “${searchInput}”`}
+              </p>
+            )}
+
+            <div className="grid gap-6 md:grid-cols-2">
+              <div className="grid h-64 place-items-center rounded-2xl bg-cream p-6">
+                {openProduct.image ? (
+                  <img
+                    src={openProduct.image}
+                    alt={openProduct.name}
+                    className="h-full w-full object-contain"
+                  />
+                ) : (
+                  <span className="font-display text-5xl font-extrabold text-brand/40">
+                    {openProduct.name.charAt(0)}
+                  </span>
+                )}
               </div>
 
-              {/* Results Count */}
-              <div className="mb-4 p-3 bg-gradient-to-r from-orange-100 via-amber-100 to-yellow-100 rounded-lg shadow-md border-2 border-orange-200">
-                <div className="text-sm font-medium text-orange-900">
-                  Showing {currentProductIndex + 1} of {searchResults.length} products
-                  {searchInput && ` for "${searchInput}"`}
+              <div className="flex flex-col">
+                <div className="flex items-baseline gap-3">
+                  <span className="font-display text-3xl font-extrabold tabular-nums text-ink">
+                    ${Number(openProduct.price).toFixed(2)}
+                  </span>
+                  <span className="inline-flex items-center gap-1 text-sm text-ink-soft">
+                    <FiStar className="text-brand" /> 4.5
+                  </span>
                 </div>
-              </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="flex flex-col items-center">
-                  {searchResults[currentProductIndex].image ? (
-                    <img
-                      src={searchResults[currentProductIndex].image}
-                      alt={searchResults[currentProductIndex].name}
-                      className="w-full h-64 object-contain bg-gradient-to-br from-orange-50 to-amber-50 rounded-lg shadow-lg p-3 border-2 border-orange-200 hover:shadow-xl transition-all duration-300"
-                    />
-                  ) : (
-                    <div className="w-full h-64 bg-gradient-to-br from-orange-200 via-amber-200 to-yellow-200 rounded-lg flex items-center justify-center shadow-lg border-2 border-orange-300">
-                      <span className="text-4xl text-orange-300 font-bold">
-                        {searchResults[currentProductIndex].name.charAt(0)}
-                      </span>
+                <p className="mt-3 text-sm leading-relaxed text-ink-soft">
+                  {openProduct.description}
+                </p>
+
+                <dl className="mt-5 space-y-2 rounded-xl bg-cream p-4 text-sm">
+                  <div className="flex justify-between">
+                    <dt className="text-ink-muted">Dish ID</dt>
+                    <dd className="font-semibold text-ink">
+                      #{openProduct.id}
+                    </dd>
+                  </div>
+                  {openProduct.code && (
+                    <div className="flex justify-between">
+                      <dt className="text-ink-muted">Code</dt>
+                      <dd className="font-semibold text-ink">
+                        {openProduct.code}
+                      </dd>
                     </div>
                   )}
-                </div>
-
-                <div>
-                  <div className="mb-4">
-                    <span className="text-3xl font-bold text-orange-500">
-                      ${searchResults[currentProductIndex].price}
-                    </span>
-                    <span className="ml-2 px-3 py-1 bg-gradient-to-r from-orange-100 to-amber-100 text-orange-700 text-sm rounded-full font-semibold shadow-md border border-orange-200">
-                      {searchResults[currentProductIndex].category}
-                    </span>
+                  <div className="flex justify-between">
+                    <dt className="text-ink-muted">Delivery</dt>
+                    <dd className="font-semibold text-ink">About 35 min</dd>
                   </div>
+                </dl>
 
-                  <p className="text-gray-700 mb-4 leading-relaxed">
-                    {searchResults[currentProductIndex].description}
-                  </p>
-
-                  <div className="space-y-2 text-sm text-gray-700 bg-gradient-to-br from-orange-50/50 to-amber-50/50 p-4 rounded-lg border-2 border-orange-100 shadow-md">
-                    <div className="flex items-center">
-                      <span className="font-medium w-20">ID:</span>
-                      <span>#{searchResults[currentProductIndex].id}</span>
-                    </div>
-                    <div className="flex items-center">
-                      <span className="font-medium w-20">Code:</span>
-                      <span>{searchResults[currentProductIndex].code}</span>
-                    </div>
-                  </div>
-
-                  {/* Add to Cart Button */}
+                {isLoggedIn ? (
                   <button
-                    onClick={() => isLoggedIn && handleAddToCart(searchResults[currentProductIndex])}
-                    disabled={!isLoggedIn}
-                    className={`w-full mt-6 py-4 rounded-xl transition-all duration-300 font-bold text-lg shadow-xl flex items-center justify-center gap-2 border-2 ${
-                      isLoggedIn
-                        ? 'bg-gradient-to-r from-orange-500 via-amber-500 to-orange-600 text-white hover:from-orange-600 hover:via-amber-600 hover:to-orange-700 hover:shadow-2xl hover:scale-105 border-orange-400 hover:border-amber-500 cursor-pointer'
-                        : 'bg-gray-300 text-gray-500 cursor-not-allowed opacity-60 border-gray-400'
-                    }`}
-                    title={!isLoggedIn ? "Please login to add items to cart" : ""}
+                    type="button"
+                    onClick={() => handleAddToCart(openProduct)}
+                    className="mt-6 inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-brand-strong text-sm font-bold text-white transition-colors hover:bg-brand-deep"
                   >
-                    <BiCart className="text-2xl" />
-                    {isLoggedIn ? `Add to Cart - $${searchResults[currentProductIndex].price}` : 'Login to Add to Cart'}
+                    <FiPlus /> Add to cart · ${Number(openProduct.price).toFixed(2)}
                   </button>
-                </div>
-              </div>
-
-              {/* Navigation */}
-              {searchResults.length > 1 && (
-                <div className="flex justify-between items-center mt-6 pt-6 border-t border-gray-200">
-                  <button
-                    onClick={prevProduct}
-                    className="flex items-center px-4 py-2 bg-gradient-to-r from-gray-200 to-gray-300 rounded-lg hover:from-gray-300 hover:to-gray-400 disabled:opacity-50 transition-all duration-300 font-medium shadow-md hover:shadow-lg"
-                    disabled={currentProductIndex === 0}
+                ) : (
+                  <Link
+                    to="/user"
+                    onClick={closeSingleProductView}
+                    className="mt-6 inline-flex h-12 items-center justify-center rounded-xl border border-line bg-white text-sm font-bold text-ink transition-colors hover:border-ink/20"
                   >
-                    ← Previous
-                  </button>
-
-                  <span className="text-gray-600 font-medium">
-                    {currentProductIndex + 1} / {searchResults.length}
-                  </span>
-
-                  <button
-                    onClick={nextProduct}
-                    className="flex items-center px-4 py-2 bg-gradient-to-r from-orange-500 to-amber-500 text-white rounded-lg hover:from-orange-600 hover:to-amber-600 disabled:opacity-50 transition-all duration-300 font-medium shadow-md hover:shadow-lg hover:scale-105"
-                    disabled={currentProductIndex === searchResults.length - 1}
-                  >
-                    Next →
-                  </button>
-                </div>
-              )}
-
-              {/* View All Results Button */}
-              <div className="text-center mt-4">
-                <button
-                  onClick={() => {
-                    closeSingleProductView();
-                    handleQuickSearch(searchInput, searchByField);
-                  }}
-                  className="text-orange-600 hover:text-orange-800 font-semibold transition-colors hover:underline"
-                >
-                  View All Search Results ({searchResults.length} products)
-                </button>
+                    Log in to order
+                  </Link>
+                )}
               </div>
             </div>
+
+            {searchResults.length > 1 && (
+              <div className="mt-6 flex items-center justify-between border-t border-line pt-5">
+                <button
+                  type="button"
+                  onClick={prevProduct}
+                  disabled={currentProductIndex === 0}
+                  className="inline-flex h-10 items-center gap-1 rounded-full border border-line px-4 text-sm font-semibold text-ink-soft transition-colors hover:text-ink disabled:cursor-not-allowed disabled:opacity-40"
+                >
+                  <FiChevronLeft /> Previous
+                </button>
+                <span className="text-sm font-medium text-ink-muted">
+                  {currentProductIndex + 1} / {searchResults.length}
+                </span>
+                <button
+                  type="button"
+                  onClick={nextProduct}
+                  disabled={currentProductIndex === searchResults.length - 1}
+                  className="inline-flex h-10 items-center gap-1 rounded-full bg-brand-strong px-4 text-sm font-semibold text-white transition-colors hover:bg-brand-deep disabled:cursor-not-allowed disabled:opacity-40"
+                >
+                  Next <FiChevronRight />
+                </button>
+              </div>
+            )}
           </div>
         </div>
       )}

@@ -1,6 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaUser, FaEnvelope, FaPhone, FaCalendar, FaSignOutAlt, FaEdit, FaCheckCircle } from "react-icons/fa";
+import {
+  FiCalendar,
+  FiCheckCircle,
+  FiEdit2,
+  FiLogOut,
+  FiMail,
+  FiPhone,
+  FiUser,
+} from "react-icons/fi";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -95,136 +103,162 @@ const Profile = () => {
 
   if (!user) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-50 via-amber-50 to-orange-100">
+      <div className="grid min-h-screen place-items-center bg-cream px-4">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-orange-500 mx-auto mb-4"></div>
-          <p className="text-gray-600 font-medium">Loading your profile...</p>
+          <div
+            role="status"
+            aria-label="Loading your profile"
+            className="mx-auto h-12 w-12 animate-spin rounded-full border-2 border-line border-t-brand"
+          />
+          <p className="mt-4 text-sm font-medium text-ink-soft">
+            Loading your profile…
+          </p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-amber-50 to-orange-100 pt-24 sm:pt-28 pb-8 sm:pb-12 px-4">
-      <div className="max-w-4xl mx-auto">
-        {/* Success Message */}
+    <div className="min-h-screen bg-cream px-4 pb-20 pt-28 sm:px-6">
+      <div className="mx-auto max-w-3xl">
         {successMessage && (
-          <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-xl flex items-center gap-3 text-green-700 shadow-lg animate-bounce">
-            <FaCheckCircle className="text-green-500 text-xl" />
-            <span className="font-medium text-sm sm:text-base">{successMessage}</span>
+          <div className="mb-5 flex items-center gap-3 rounded-2xl border border-brand/30 bg-brand-tint/40 px-5 py-4 text-ink">
+            <FiCheckCircle className="shrink-0 text-lg text-brand-deep" />
+            <span className="text-sm font-semibold">{successMessage}</span>
           </div>
         )}
 
-        {/* Profile Card */}
-        <div className="bg-white rounded-2xl sm:rounded-3xl shadow-2xl overflow-hidden border border-orange-100">
-          {/* Header Banner */}
-          <div className="bg-gradient-to-r from-orange-500 via-orange-600 to-amber-500 h-24 sm:h-32 relative">
-            <div className="absolute inset-0 bg-black/5"></div>
-            <div className="absolute -bottom-12 sm:-bottom-16 left-4 sm:left-8">
-              <div className="w-24 h-24 sm:w-32 sm:h-32 bg-gradient-to-br from-orange-400 to-amber-500 rounded-full border-4 border-white shadow-2xl flex items-center justify-center hover:scale-105 transition-transform duration-300">
-                <span className="text-3xl sm:text-5xl font-bold text-white">{getUserInitials()}</span>
-              </div>
-            </div>
-          </div>
+        <div className="overflow-hidden rounded-3xl border border-line bg-white shadow-card">
+          {/* Banner */}
+          <div className="h-24 bg-brand-strong sm:h-28" aria-hidden="true" />
 
-          {/* Profile Content */}
-          <div className="pt-16 sm:pt-20 pb-6 sm:pb-8 px-4 sm:px-8">
-            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4 mb-6">
-              <div>
-                <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">
-                  {user.firstName} {user.lastName}
-                </h1>
-                <p className="text-gray-500 flex items-center gap-2">
-                  <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-                  Foodie Member
-                </p>
-              </div>
-              
-              <div className="flex flex-wrap gap-2 sm:gap-3">
+          <div className="px-5 pb-8 sm:px-8">
+            <div className="flex flex-wrap items-end justify-between gap-4">
+              <span className="-mt-12 grid h-24 w-24 shrink-0 place-items-center rounded-full border-4 border-white bg-ink font-display text-3xl font-extrabold text-cream shadow-card sm:-mt-14 sm:h-28 sm:w-28 sm:text-4xl">
+                {getUserInitials()}
+              </span>
+
+              <div className="flex flex-wrap gap-2">
                 {!isEditing ? (
                   <button
                     onClick={handleEditToggle}
-                    className="flex-1 sm:flex-none px-4 sm:px-5 py-2.5 bg-orange-500 text-white rounded-xl hover:bg-orange-600 transition-all duration-200 flex items-center justify-center gap-2 shadow-md hover:shadow-xl hover:scale-105 text-sm sm:text-base"
+                    className="inline-flex h-10 items-center justify-center gap-2 rounded-full bg-brand-strong px-4 text-sm font-bold text-white transition-colors hover:bg-brand-deep"
                   >
-                    <FaEdit /> <span>Edit Profile</span>
+                    <FiEdit2 /> Edit profile
                   </button>
                 ) : (
                   <button
                     onClick={handleEditToggle}
-                    className="flex-1 sm:flex-none px-4 sm:px-5 py-2.5 bg-gray-400 text-white rounded-xl hover:bg-gray-500 transition-all duration-200 shadow-md hover:scale-105 text-sm sm:text-base"
+                    className="inline-flex h-10 items-center justify-center rounded-full border border-line px-4 text-sm font-bold text-ink-soft transition-colors hover:border-ink/20 hover:text-ink"
                   >
                     Cancel
                   </button>
                 )}
-                
+
                 <button
                   onClick={handleLogout}
-                  className="flex-1 sm:flex-none px-4 sm:px-5 py-2.5 bg-red-500 text-white rounded-xl hover:bg-red-600 transition-all duration-200 flex items-center justify-center gap-2 shadow-md hover:shadow-xl hover:scale-105 text-sm sm:text-base"
+                  className="inline-flex h-10 items-center justify-center gap-2 rounded-full border border-line px-4 text-sm font-bold text-ink-soft transition-colors hover:border-red-200 hover:text-red-600"
                 >
-                  <FaSignOutAlt /> <span>Logout</span>
+                  <FiLogOut /> Log out
                 </button>
               </div>
             </div>
 
+            <div className="mt-5">
+              <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-brand-deep">
+                Foodie member
+              </p>
+              <h1 className="mt-1 font-display text-2xl font-extrabold text-ink sm:text-3xl">
+                {user.firstName} {user.lastName}
+              </h1>
+              <p className="mt-1 flex items-center gap-1.5 text-sm text-ink-muted">
+                <span
+                  className="h-1.5 w-1.5 rounded-full bg-brand"
+                  aria-hidden="true"
+                />
+                Active account
+              </p>
+            </div>
+
             {!isEditing ? (
               // View Mode
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mt-6 sm:mt-8">
-                <div className="bg-gradient-to-br from-orange-50 to-orange-100/50 rounded-xl p-5 sm:p-6 border border-orange-200 hover:shadow-lg hover:scale-105 transition-all duration-300">
-                  <div className="flex items-center gap-3 mb-3">
-                    <div className="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center">
-                      <FaUser className="text-white text-lg" />
-                    </div>
-                    <h3 className="font-semibold text-gray-700 text-sm sm:text-base">First Name</h3>
+              <dl className="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-2">
+                <div className="rounded-2xl border border-line bg-cream p-5">
+                  <div className="flex items-center gap-3">
+                    <span className="grid h-9 w-9 place-items-center rounded-lg bg-brand-tint text-brand-deep">
+                      <FiUser />
+                    </span>
+                    <dt className="text-xs font-bold uppercase tracking-wider text-ink-muted">
+                      First name
+                    </dt>
                   </div>
-                  <p className="text-gray-800 text-base sm:text-lg font-medium ml-0 sm:ml-13">{user.firstName}</p>
+                  <dd className="mt-3 text-base font-semibold text-ink">
+                    {user.firstName}
+                  </dd>
                 </div>
 
-                <div className="bg-gradient-to-br from-orange-50 to-orange-100/50 rounded-xl p-5 sm:p-6 border border-orange-200 hover:shadow-lg hover:scale-105 transition-all duration-300">
-                  <div className="flex items-center gap-3 mb-3">
-                    <div className="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center">
-                      <FaUser className="text-white text-lg" />
-                    </div>
-                    <h3 className="font-semibold text-gray-700 text-sm sm:text-base">Last Name</h3>
+                <div className="rounded-2xl border border-line bg-cream p-5">
+                  <div className="flex items-center gap-3">
+                    <span className="grid h-9 w-9 place-items-center rounded-lg bg-brand-tint text-brand-deep">
+                      <FiUser />
+                    </span>
+                    <dt className="text-xs font-bold uppercase tracking-wider text-ink-muted">
+                      Last name
+                    </dt>
                   </div>
-                  <p className="text-gray-800 text-base sm:text-lg font-medium ml-0 sm:ml-13">{user.lastName}</p>
+                  <dd className="mt-3 text-base font-semibold text-ink">
+                    {user.lastName}
+                  </dd>
                 </div>
 
-                <div className="bg-gradient-to-br from-amber-50 to-amber-100/50 rounded-xl p-5 sm:p-6 border border-amber-200 hover:shadow-lg hover:scale-105 transition-all duration-300">
-                  <div className="flex items-center gap-3 mb-3">
-                    <div className="w-10 h-10 bg-amber-500 rounded-lg flex items-center justify-center">
-                      <FaEnvelope className="text-white text-lg" />
-                    </div>
-                    <h3 className="font-semibold text-gray-700 text-sm sm:text-base">Email</h3>
+                <div className="rounded-2xl border border-line bg-cream p-5">
+                  <div className="flex items-center gap-3">
+                    <span className="grid h-9 w-9 place-items-center rounded-lg bg-brand-tint text-brand-deep">
+                      <FiMail />
+                    </span>
+                    <dt className="text-xs font-bold uppercase tracking-wider text-ink-muted">
+                      Email
+                    </dt>
                   </div>
-                  <p className="text-gray-800 text-sm sm:text-base font-medium ml-0 sm:ml-13 break-all">{user.email}</p>
+                  <dd className="mt-3 break-all text-base font-semibold text-ink">
+                    {user.email}
+                  </dd>
                 </div>
 
-                <div className="bg-gradient-to-br from-amber-50 to-amber-100/50 rounded-xl p-5 sm:p-6 border border-amber-200 hover:shadow-lg hover:scale-105 transition-all duration-300">
-                  <div className="flex items-center gap-3 mb-3">
-                    <div className="w-10 h-10 bg-amber-500 rounded-lg flex items-center justify-center">
-                      <FaPhone className="text-white text-lg" />
-                    </div>
-                    <h3 className="font-semibold text-gray-700 text-sm sm:text-base">Phone</h3>
+                <div className="rounded-2xl border border-line bg-cream p-5">
+                  <div className="flex items-center gap-3">
+                    <span className="grid h-9 w-9 place-items-center rounded-lg bg-brand-tint text-brand-deep">
+                      <FiPhone />
+                    </span>
+                    <dt className="text-xs font-bold uppercase tracking-wider text-ink-muted">
+                      Phone
+                    </dt>
                   </div>
-                  <p className="text-gray-800 text-base sm:text-lg font-medium ml-0 sm:ml-13">{user.phone || "Not provided"}</p>
+                  <dd className="mt-3 text-base font-semibold text-ink">
+                    {user.phone || "Not provided"}
+                  </dd>
                 </div>
 
-                <div className="bg-gradient-to-br from-green-50 to-green-100/50 rounded-xl p-5 sm:p-6 border border-green-200 md:col-span-2 hover:shadow-lg hover:scale-105 transition-all duration-300">
-                  <div className="flex items-center gap-3 mb-3">
-                    <div className="w-10 h-10 bg-green-500 rounded-lg flex items-center justify-center">
-                      <FaCalendar className="text-white text-lg" />
-                    </div>
-                    <h3 className="font-semibold text-gray-700 text-sm sm:text-base">Member Since</h3>
+                <div className="rounded-2xl border border-line bg-cream p-5 sm:col-span-2">
+                  <div className="flex items-center gap-3">
+                    <span className="grid h-9 w-9 place-items-center rounded-lg bg-brand-tint text-brand-deep">
+                      <FiCalendar />
+                    </span>
+                    <dt className="text-xs font-bold uppercase tracking-wider text-ink-muted">
+                      Member since
+                    </dt>
                   </div>
-                  <p className="text-gray-800 text-base sm:text-lg font-medium ml-0 sm:ml-13">{formatDate(user.createdAt)}</p>
+                  <dd className="mt-3 text-base font-semibold text-ink">
+                    {formatDate(user.createdAt)}
+                  </dd>
                 </div>
-              </div>
+              </dl>
             ) : (
               // Edit Mode
               <form onSubmit={handleSaveChanges} className="mt-8">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-gray-700 font-semibold mb-2">
+                    <label className="block text-ink font-semibold mb-2">
                       First Name <span className="text-red-500">*</span>
                     </label>
                     <input
@@ -233,12 +267,12 @@ const Profile = () => {
                       value={editData.firstName}
                       onChange={handleChange}
                       required
-                      className="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all duration-200"
+                      className="w-full border border-line rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:border-brand focus:ring-brand/30 transition-all duration-200"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-gray-700 font-semibold mb-2">
+                    <label className="block text-ink font-semibold mb-2">
                       Last Name <span className="text-red-500">*</span>
                     </label>
                     <input
@@ -247,12 +281,12 @@ const Profile = () => {
                       value={editData.lastName}
                       onChange={handleChange}
                       required
-                      className="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all duration-200"
+                      className="w-full border border-line rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:border-brand focus:ring-brand/30 transition-all duration-200"
                     />
                   </div>
 
                   <div className="md:col-span-2">
-                    <label className="block text-gray-700 font-semibold mb-2">
+                    <label className="block text-ink font-semibold mb-2">
                       Phone (Optional)
                     </label>
                     <input
@@ -261,52 +295,59 @@ const Profile = () => {
                       value={editData.phone}
                       onChange={handleChange}
                       placeholder="+855 12 345 678"
-                      className="w-full border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all duration-200"
+                      className="w-full border border-line rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:border-brand focus:ring-brand/30 transition-all duration-200"
                     />
                   </div>
 
                   <div className="md:col-span-2">
-                    <label className="block text-gray-700 font-semibold mb-2">
+                    <label className="block text-ink font-semibold mb-2">
                       Email (Cannot be changed)
                     </label>
                     <input
                       type="email"
                       value={user.email}
                       disabled
-                      className="w-full border border-gray-300 rounded-xl px-4 py-3 bg-gray-100 text-gray-500 cursor-not-allowed"
+                      className="w-full border border-line rounded-xl px-4 py-3 bg-cream text-ink-muted cursor-not-allowed"
                     />
                   </div>
                 </div>
 
                 <button
                   type="submit"
-                  className="mt-6 w-full bg-gradient-to-r from-orange-500 to-amber-500 text-white font-semibold py-3.5 rounded-xl 
-                             hover:from-orange-600 hover:to-amber-600 active:scale-95 transition-all duration-200
-                             shadow-lg hover:shadow-xl"
+                  className="mt-6 inline-flex h-12 w-full items-center justify-center rounded-xl bg-brand-strong text-sm font-bold text-white transition-colors hover:bg-brand-deep"
                 >
-                  Save Changes
+                  Save changes
                 </button>
               </form>
             )}
 
             {/* Account Stats */}
-            <div className="mt-8 sm:mt-10 pt-6 sm:pt-8 border-t-2 border-gray-200">
-              <h2 className="text-lg sm:text-xl font-bold text-gray-800 mb-4 sm:mb-6">Account Statistics</h2>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
-                <div className="text-center p-4 sm:p-6 bg-gradient-to-br from-orange-50 to-amber-50 rounded-xl border border-orange-200 hover:shadow-lg hover:scale-105 transition-all duration-300">
-                  <p className="text-2xl sm:text-3xl font-bold text-orange-600">0</p>
-                  <p className="text-xs sm:text-sm text-gray-600 mt-1 sm:mt-2">Total Orders</p>
+            <div className="mt-8 border-t border-line pt-6 sm:mt-10 sm:pt-8">
+              <h2 className="font-display text-lg font-bold text-ink">
+                Account statistics
+              </h2>
+              <div className="mt-4 grid grid-cols-2 gap-3 md:grid-cols-3">
+                <div className="rounded-2xl bg-cream p-5">
+                  <p className="font-display text-2xl font-extrabold tabular-nums text-ink">
+                    0
+                  </p>
+                  <p className="mt-1 text-xs text-ink-muted">Total orders</p>
                 </div>
-                <div className="text-center p-4 sm:p-6 bg-gradient-to-br from-amber-50 to-orange-50 rounded-xl border border-amber-200 hover:shadow-lg hover:scale-105 transition-all duration-300">
-                  <p className="text-2xl sm:text-3xl font-bold text-amber-600">$0.00</p>
-                  <p className="text-xs sm:text-sm text-gray-600 mt-1 sm:mt-2">Total Spent</p>
+                <div className="rounded-2xl bg-cream p-5">
+                  <p className="font-display text-2xl font-extrabold tabular-nums text-ink">
+                    $0.00
+                  </p>
+                  <p className="mt-1 text-xs text-ink-muted">Total spent</p>
                 </div>
-                <div className="text-center p-4 sm:p-6 bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl border border-green-200 col-span-2 md:col-span-1 hover:shadow-lg hover:scale-105 transition-all duration-300">
-                  <p className="text-2xl sm:text-3xl font-bold text-green-600 flex items-center justify-center gap-2">
-                    <span className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></span>
+                <div className="col-span-2 rounded-2xl bg-cream p-5 md:col-span-1">
+                  <p className="flex items-center gap-2 font-display text-2xl font-extrabold text-ink">
+                    <span
+                      className="h-2 w-2 rounded-full bg-brand"
+                      aria-hidden="true"
+                    />
                     Active
                   </p>
-                  <p className="text-xs sm:text-sm text-gray-600 mt-1 sm:mt-2">Account Status</p>
+                  <p className="mt-1 text-xs text-ink-muted">Account status</p>
                 </div>
               </div>
             </div>

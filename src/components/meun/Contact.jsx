@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
+import { FiClock, FiMail, FiMapPin, FiPhone, FiSend } from "react-icons/fi";
+
+const inputClass =
+  "h-11 w-full rounded-xl border border-line bg-white px-3.5 text-sm text-ink placeholder:text-ink-muted focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/30";
 
 const Contact = () => {
   useEffect(() => {
-    document.title = 'Contact Us - Foodie | Get in Touch';
+    document.title = "Contact us - Foodie | Get in touch";
   }, []);
 
   const [form, setForm] = useState({
@@ -23,22 +27,12 @@ const Contact = () => {
     e.preventDefault();
     if (!form.message) return;
 
-    const toastId = 'contact-form';
+    const toastId = "contact-form";
     if (!toast.isActive(toastId)) {
-      toast.success("✅ Thank you for your message!", {
+      toast.success("Message sent. We'll get back to you shortly.", {
         toastId,
         position: "top-right",
         autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        style: {
-          background: 'linear-gradient(135deg, #f97316 0%, #f59e0b 100%)',
-          color: '#fff',
-          borderRadius: '12px',
-          fontWeight: '600',
-        },
       });
     }
 
@@ -52,116 +46,226 @@ const Contact = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-orange-50/50 to-amber-50/50 pt-24 sm:pt-28 pb-12 flex flex-col items-center px-4 sm:px-8">
-      <div className="text-center mb-8">
-        <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 mb-3">
-          Contact <span className="bg-gradient-to-r from-orange-600 to-amber-600 bg-clip-text text-transparent">Us</span>
-        </h1>
-        <p className="text-gray-600 text-base sm:text-lg max-w-2xl mx-auto">
-          Get in touch with us. We'd love to hear from you!
-        </p>
-      </div>
-      <div className="w-full max-w-5xl grid md:grid-cols-2 gap-8 md:gap-10 bg-white p-6 sm:p-8 rounded-2xl shadow-2xl border-2 border-orange-100 hover:shadow-3xl transition-all duration-300">
-        {/* Contact Info */}
-        <div className="bg-gradient-to-br from-orange-50 to-amber-50 p-6 rounded-xl border-2 border-orange-200">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
-            <span className="text-orange-600">📞</span> Get in Touch
-          </h2>
-          <div className="space-y-4">
-            <div className="flex items-start gap-3 p-3 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300">
-              <span className="text-orange-600 text-xl mt-0.5">📍</span>
-              <div>
-                <strong className="text-gray-800">Address:</strong>
-                <p className="text-gray-600">123 Foodie Street, Phnom Penh, Cambodia</p>
-              </div>
-            </div>
-            <div className="flex items-start gap-3 p-3 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300">
-              <span className="text-orange-600 text-xl mt-0.5">📱</span>
-              <div>
-                <strong className="text-gray-800">Phone:</strong>
-                <p className="text-gray-600">+855 12 345 678</p>
-              </div>
-            </div>
-            <div className="flex items-start gap-3 p-3 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300">
-              <span className="text-orange-600 text-xl mt-0.5">✉️</span>
-              <div>
-                <strong className="text-gray-800">Email:</strong>
-                <p className="text-gray-600">contact@foodie.com</p>
-              </div>
-            </div>
-          </div>
+    <div className="min-h-screen bg-cream px-4 pb-20 pt-28 sm:px-6 lg:px-8 lg:pt-32">
+      <div className="mx-auto max-w-5xl">
+        <div className="max-w-2xl">
+          <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-brand-deep">
+            Contact
+          </p>
+          <h1 className="mt-3 font-display text-4xl font-extrabold leading-tight text-ink sm:text-5xl">
+            Talk to us.
+          </h1>
+          <p className="mt-4 text-base leading-relaxed text-ink-soft sm:text-lg">
+            Questions about an order, a large booking, or partnering with us? We
+            reply within one working day.
+          </p>
         </div>
 
-        {/* Contact Form */}
-        <form onSubmit={handleSubmit} className="flex flex-col space-y-4">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <input
-              type="text"
-              name="firstName"
-              placeholder="First Name"
-              value={form.firstName}
-              onChange={handleChange}
-              className="border-2 border-gray-300 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all duration-200"
-              required
-            />
-            <input
-              type="text"
-              name="lastName"
-              placeholder="Last Name"
-              value={form.lastName}
-              onChange={handleChange}
-              className="border-2 border-gray-300 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all duration-200"
-              required
-            />
+        <div className="mt-10 grid gap-5 md:grid-cols-[0.85fr_1.15fr]">
+          {/* Contact details */}
+          <div className="rounded-3xl bg-ink p-7 text-cream sm:p-8">
+            <h2 className="font-display text-xl font-bold">Get in touch</h2>
+            <p className="mt-2 text-sm leading-relaxed text-cream/70">
+              Prefer to call? Our kitchen line is open every day until 22:00.
+            </p>
+
+            <dl className="mt-7 space-y-5 text-sm">
+              <div className="flex gap-3">
+                <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-white/10 text-brand">
+                  <FiMapPin />
+                </span>
+                <div>
+                  <dt className="text-[11px] font-bold uppercase tracking-wider text-cream/50">
+                    Address
+                  </dt>
+                  <dd className="mt-0.5">123 Foodie Street, Phnom Penh</dd>
+                </div>
+              </div>
+
+              <div className="flex gap-3">
+                <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-white/10 text-brand">
+                  <FiPhone />
+                </span>
+                <div>
+                  <dt className="text-[11px] font-bold uppercase tracking-wider text-cream/50">
+                    Phone
+                  </dt>
+                  <dd className="mt-0.5">
+                    <a
+                      href="tel:+85512345678"
+                      className="transition-colors hover:text-brand-tint"
+                    >
+                      +855 12 345 678
+                    </a>
+                  </dd>
+                </div>
+              </div>
+
+              <div className="flex gap-3">
+                <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-white/10 text-brand">
+                  <FiMail />
+                </span>
+                <div>
+                  <dt className="text-[11px] font-bold uppercase tracking-wider text-cream/50">
+                    Email
+                  </dt>
+                  <dd className="mt-0.5">
+                    <a
+                      href="mailto:contact@foodie.com"
+                      className="transition-colors hover:text-brand-tint"
+                    >
+                      contact@foodie.com
+                    </a>
+                  </dd>
+                </div>
+              </div>
+
+              <div className="flex gap-3">
+                <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-white/10 text-brand">
+                  <FiClock />
+                </span>
+                <div>
+                  <dt className="text-[11px] font-bold uppercase tracking-wider text-cream/50">
+                    Opening hours
+                  </dt>
+                  <dd className="mt-0.5">Every day · 10:00 – 22:00</dd>
+                </div>
+              </div>
+            </dl>
           </div>
-          <input
-            type="email"
-            name="email"
-            placeholder="Email Address"
-            value={form.email}
-            onChange={handleChange}
-            className="border-2 border-gray-300 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all duration-200"
-            required
-          />
-          <input
-            type="tel"
-            name="phone"
-            placeholder="Phone Number"
-            value={form.phone}
-            onChange={handleChange}
-            className="border-2 border-gray-300 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all duration-200"
-            required
-          />
-          <textarea
-            name="message"
-            placeholder="Your Message"
-            rows="5"
-            value={form.message}
-            onChange={handleChange}
-            className="border-2 border-gray-300 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all duration-200 resize-none"
-            required
-          ></textarea>
 
-          <button
-            type="submit"
-            className="bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-semibold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 flex items-center justify-center gap-2"
+          {/* Form */}
+          <form
+            onSubmit={handleSubmit}
+            className="rounded-3xl border border-line bg-white p-6 shadow-card sm:p-8"
           >
-            <span>Send Message</span>
-            <span>✉️</span>
-          </button>
-        </form>
-      </div>
+            <h2 className="font-display text-xl font-bold text-ink">
+              Send a message
+            </h2>
+            <p className="mt-1 text-sm text-ink-muted">
+              Tell us what you need and we'll take it from there.
+            </p>
 
-      {/* Google Map */}
-      <div className="w-full max-w-5xl mt-12 rounded-2xl overflow-hidden shadow-md">
-        <iframe
-          title="DaraPro Location"
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3918.681376045193!2d104.8990464746716!3d11.556373988644962!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3109512e4d528a89%3A0x3c41b90597d8a986!2sPhnom%20Penh!5e0!3m2!1sen!2skh!4v1697350000000!5m2!1sen!2skh"
-          width="100%"
-          height="350"
-          allowFullScreen=""
-          loading="lazy"
-        ></iframe>
+            <div className="mt-6 space-y-4">
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div>
+                  <label
+                    htmlFor="firstName"
+                    className="mb-1.5 block text-sm font-semibold text-ink"
+                  >
+                    First name
+                  </label>
+                  <input
+                    id="firstName"
+                    type="text"
+                    name="firstName"
+                    placeholder="Sokha"
+                    value={form.firstName}
+                    onChange={handleChange}
+                    className={inputClass}
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label
+                    htmlFor="lastName"
+                    className="mb-1.5 block text-sm font-semibold text-ink"
+                  >
+                    Last name
+                  </label>
+                  <input
+                    id="lastName"
+                    type="text"
+                    name="lastName"
+                    placeholder="Chan"
+                    value={form.lastName}
+                    onChange={handleChange}
+                    className={inputClass}
+                    required
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label
+                  htmlFor="email"
+                  className="mb-1.5 block text-sm font-semibold text-ink"
+                >
+                  Email
+                </label>
+                <input
+                  id="email"
+                  type="email"
+                  name="email"
+                  placeholder="you@example.com"
+                  value={form.email}
+                  onChange={handleChange}
+                  className={inputClass}
+                  required
+                />
+              </div>
+
+              <div>
+                <label
+                  htmlFor="phone"
+                  className="mb-1.5 block text-sm font-semibold text-ink"
+                >
+                  Phone
+                </label>
+                <input
+                  id="phone"
+                  type="tel"
+                  name="phone"
+                  placeholder="+855 12 345 678"
+                  value={form.phone}
+                  onChange={handleChange}
+                  className={inputClass}
+                  required
+                />
+              </div>
+
+              <div>
+                <label
+                  htmlFor="message"
+                  className="mb-1.5 block text-sm font-semibold text-ink"
+                >
+                  Message
+                </label>
+                <textarea
+                  id="message"
+                  name="message"
+                  rows="5"
+                  placeholder="What can we help with?"
+                  value={form.message}
+                  onChange={handleChange}
+                  className="w-full resize-none rounded-xl border border-line bg-white p-3.5 text-sm text-ink placeholder:text-ink-muted focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/30"
+                  required
+                ></textarea>
+              </div>
+
+              <button
+                type="submit"
+                className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-brand-strong text-sm font-bold text-white transition-colors hover:bg-brand-deep"
+              >
+                <FiSend /> Send message
+              </button>
+            </div>
+          </form>
+        </div>
+
+        {/* Map */}
+        <div className="mt-8 overflow-hidden rounded-3xl border border-line bg-white p-2 shadow-card">
+          <iframe
+            title="Foodie location in Phnom Penh"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3918.681376045193!2d104.8990464746716!3d11.556373988644962!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3109512e4d528a89%3A0x3c41b90597d8a986!2sPhnom%20Penh!5e0!3m2!1sen!2skh!4v1697350000000!5m2!1sen!2skh"
+            width="100%"
+            height="320"
+            className="rounded-2xl"
+            allowFullScreen=""
+            loading="lazy"
+          ></iframe>
+        </div>
       </div>
     </div>
   );

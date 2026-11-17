@@ -2,6 +2,20 @@ import React, { createContext, useState, useEffect, useMemo } from "react";
 import { ProductData } from "../data";
 import { toast } from "react-toastify";
 
+// Shared toast styling — flat ink surface, orange used only for brand marks.
+const toastStyle = {
+  background: "#292524",
+  color: "#FFF7ED",
+  borderRadius: "12px",
+  fontWeight: "600",
+};
+const errorToastStyle = {
+  background: "#B91C1C",
+  color: "#FFFFFF",
+  borderRadius: "12px",
+  fontWeight: "600",
+};
+
 // Create a global context for the shop
 export const ShopContext = createContext();
 
@@ -131,7 +145,7 @@ const ShopContextProvider = ({ children }) => {
       if (exist) {
         // If already in cart, increase amount
         if (!toast.isActive(toastId)) {
-          toast.success(`🔄 ${product.name} quantity increased!`, {
+          toast.success(`${product.name} quantity updated.`, {
             toastId,
             position: "top-right",
             autoClose: 2000,
@@ -139,12 +153,7 @@ const ShopContextProvider = ({ children }) => {
             closeOnClick: true,
             pauseOnHover: true,
             draggable: true,
-            style: {
-              background: 'linear-gradient(135deg, #f97316 0%, #f59e0b 100%)',
-              color: '#fff',
-              borderRadius: '12px',
-              fontWeight: '600',
-            },
+            style: toastStyle,
           });
         }
         return prev.map(item =>
@@ -153,7 +162,7 @@ const ShopContextProvider = ({ children }) => {
       } else {
         // Add new item
         if (!toast.isActive(toastId)) {
-          toast.success(`✅ ${product.name} added to cart!`, {
+          toast.success(`${product.name} added to your cart.`, {
             toastId,
             position: "top-right",
             autoClose: 2500,
@@ -161,13 +170,7 @@ const ShopContextProvider = ({ children }) => {
             closeOnClick: true,
             pauseOnHover: true,
             draggable: true,
-            style: {
-              background: 'linear-gradient(135deg, #f97316 0%, #f59e0b 100%)',
-              color: '#fff',
-              borderRadius: '12px',
-              fontWeight: '600',
-              boxShadow: '0 4px 12px rgba(249, 115, 22, 0.4)',
-            },
+            style: toastStyle,
           });
         }
         return [...prev, { ...product, amount: 1 }];
@@ -181,7 +184,7 @@ const ShopContextProvider = ({ children }) => {
     setCart(prev => prev.filter(item => item.id !== id));
     
     if (!toast.isActive(toastId)) {
-      toast.info(`🗑️ ${item?.name || 'Item'} removed from cart`, {
+      toast.info(`${item?.name || 'Item'} removed from your cart.`, {
         toastId,
         position: "top-right",
         autoClose: 2000,
@@ -189,12 +192,7 @@ const ShopContextProvider = ({ children }) => {
         closeOnClick: true,
         pauseOnHover: true,
         draggable: true,
-        style: {
-          background: 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)',
-          color: '#fff',
-          borderRadius: '12px',
-          fontWeight: '600',
-        },
+        style: errorToastStyle,
       });
     }
   };
@@ -204,7 +202,7 @@ const ShopContextProvider = ({ children }) => {
     const toastId = 'clear-cart';
     
     if (!toast.isActive(toastId)) {
-      toast.info("🧹 Cart cleared successfully!", {
+      toast.info("Cart cleared.", {
         toastId,
         position: "top-center",
         autoClose: 2000,
@@ -212,12 +210,7 @@ const ShopContextProvider = ({ children }) => {
         closeOnClick: true,
         pauseOnHover: true,
         draggable: true,
-        style: {
-          background: 'linear-gradient(135deg, #6b7280 0%, #4b5563 100%)',
-          color: '#fff',
-          borderRadius: '12px',
-          fontWeight: '600',
-        },
+        style: toastStyle,
       });
     }
   };
@@ -245,7 +238,7 @@ const ShopContextProvider = ({ children }) => {
     if (promoCode.toUpperCase() === "SAVE10") {
       setIsPromoApplied(true);
       if (!toast.isActive(toastId)) {
-        toast.success("🎉 Promo applied! You saved 10%", {
+        toast.success("Promo applied — you saved 10%.", {
           toastId,
           position: "top-center",
           autoClose: 3000,
@@ -253,19 +246,13 @@ const ShopContextProvider = ({ children }) => {
           closeOnClick: true,
           pauseOnHover: true,
           draggable: true,
-          style: {
-            background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
-            color: '#fff',
-            borderRadius: '12px',
-            fontWeight: '600',
-            boxShadow: '0 4px 12px rgba(16, 185, 129, 0.4)',
-          },
+          style: toastStyle,
         });
       }
     } else {
       setIsPromoApplied(false);
       if (!toast.isActive(toastId)) {
-        toast.error("❌ Invalid promo code. Try SAVE10", {
+        toast.error("That code isn't valid. Try SAVE10.", {
           toastId,
           position: "top-center",
           autoClose: 3000,
@@ -273,12 +260,7 @@ const ShopContextProvider = ({ children }) => {
           closeOnClick: true,
           pauseOnHover: true,
           draggable: true,
-          style: {
-            background: 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)',
-            color: '#fff',
-            borderRadius: '12px',
-            fontWeight: '600',
-          },
+          style: errorToastStyle,
         });
       }
     }
@@ -289,7 +271,7 @@ const ShopContextProvider = ({ children }) => {
     const toastId = 'checkout';
     
     if (!toast.isActive(toastId)) {
-      toast.success(`🎊 Order placed! Total: $${total.toFixed(2)}`, {
+      toast.success(`Order placed! Total ${total.toFixed(2)}.`, {
         toastId,
         position: "top-center",
         autoClose: 4000,
@@ -297,14 +279,7 @@ const ShopContextProvider = ({ children }) => {
         closeOnClick: true,
         pauseOnHover: true,
         draggable: true,
-        style: {
-          background: 'linear-gradient(135deg, #f97316 0%, #f59e0b 100%)',
-          color: '#fff',
-          borderRadius: '12px',
-          fontWeight: '600',
-          fontSize: '16px',
-          boxShadow: '0 8px 16px rgba(249, 115, 22, 0.5)',
-        },
+        style: toastStyle,
       });
     }
     

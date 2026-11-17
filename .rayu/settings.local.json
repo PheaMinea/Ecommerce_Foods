@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run:*)",
+      "Bash(grep -o \"fff8f0\" dist/assets/index-*.css)",
+      "Bash(grep -rn \"linear-gradient\" --include=*.jsx .)",
+      "Bash(sed -i 's/FaCheckCircle/FiCheckCircle/g; s/FaSignOutAlt/FiLogOut/g; s/FaEnvelope/FiMail/g; s/FaCalendar/FiCalendar/g; s/FaPhone/FiPhone/g; s/FaEdit/FiEdit2/g; s/FaUser/FiUser/g' Profile.jsx)",
+      "Bash(sed -n '1,10p' Profile.jsx)",
+      "Bash(grep -rn \"bg-gradient-to\\\\|#[fF]{1}f8f0\\\\|linear-gradient\" --include=*.jsx --include=*.css .)",
+      "Bash(grep -rno \"\\\\\\(bg\\\\|text\\\\|border\\\\|ring\\\\|from\\\\|to\\\\|via\\\\\\)-\\\\\\(orange\\\\|amber\\\\|stone\\\\|neutral\\\\|zinc\\\\|slate\\\\|yellow\\\\\\)-[0-9]*\\\\\\(/[0-9]*\\\\\\)\\\\?\" --include=*.jsx --include=*.css .)",
+      "Bash(npx eslint:*)",
+      "Read(//c/Program Files/Google/Chrome/Application/**)",
+      "Read(//c/Program Files \\(x86\\)/Microsoft/Edge/Application/**)",
+      "Read(//c/Program Files/Microsoft/Edge/Application/**)",
+      "Bash(SHOT_DIR=/tmp/foodie-shots node .tmp-shots.mjs)",
+      "Bash(node -e \"console.log\\(process.env.TEMP\\)\")",
+      "Bash(mkdir -p .shots)",
+      "Bash(cp /tmp/foodie-shots/*.png .shots/)",
+      "Bash(SHOT_DIR=\"d:/book/ស្នាដៃរបស់ខ្ញុំ/Frontend/Pro_3/foodie/.shots\" node .tmp-shots.mjs)",
+      "Bash(node .tmp-interact.mjs)"
+    ]
+  }
+}

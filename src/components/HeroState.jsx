@@ -1,78 +1,61 @@
 import React from "react";
-import { FaLeaf, FaTruck, FaHandshake, FaCheckCircle } from "react-icons/fa"; 
-// ✅ បន្ថែម FaCheckCircle នៅទីនេះ
+import { FiAward, FiCheckCircle, FiTruck, FiUsers } from "react-icons/fi";
+
+const features = [
+  {
+    icon: FiCheckCircle,
+    title: "100% organic",
+    desc: "Produce grown without harmful chemicals or pesticides.",
+  },
+  {
+    icon: FiTruck,
+    title: "Fast delivery",
+    desc: "Picked and cooked the same day, at your door within hours.",
+  },
+  {
+    icon: FiUsers,
+    title: "Farmer support",
+    desc: "Fair trade prices and sustainable practices for local farms.",
+  },
+  {
+    icon: FiAward,
+    title: "Quality assured",
+    desc: "Every dish is checked for freshness before it leaves the pass.",
+  },
+];
 
 const HeroState = () => {
-  // 🔹 បញ្ជី feature cards ដែលបង្ហាញលក្ខណៈពិសេសរបស់សេវា
-  const features = [
-    {
-      icon: <FaLeaf className="text-green-600 text-4xl" />,
-      title: "100% Organic",
-      desc: "All our produce is grown without harmful chemicals or pesticides.",
-      color: "from-green-500 to-emerald-500",
-      bg: "from-green-50 to-emerald-50"
-    },
-    {
-      icon: <FaTruck className="text-orange-600 text-4xl" />,
-      title: "Fast Delivery",
-      desc: "We deliver fresh produce at your doorstep within hours of harvesting.",
-      color: "from-orange-500 to-amber-500",
-      bg: "from-orange-50 to-amber-50"
-    },
-    {
-      icon: <FaHandshake className="text-amber-600 text-4xl" />,
-      title: "Farmer Support",
-      desc: "Empowering local farmers with fair trade and sustainable practices.",
-      color: "from-amber-500 to-orange-500",
-      bg: "from-amber-50 to-orange-50"
-    },
-    {
-      icon: <FaCheckCircle className="text-orange-600 text-4xl" />,
-      title: "Quality Assured",
-      desc: "Every item is checked for freshness and quality before delivery.",
-      color: "from-orange-500 to-red-500",
-      bg: "from-orange-50 to-red-50"
-    },
-  ];
-
   return (
-    <section className="py-16 bg-gradient-to-b from-orange-50/30 to-amber-50/30">
-      <div className="max-w-6xl mx-auto text-center px-4">
-        {/* ចំណងជើង */}
-        <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">
-          Why Choose Us
-        </h2>
-        <p className="text-gray-600 text-base sm:text-lg mb-10 max-w-2xl mx-auto">
-          Experience the best in quality, service, and commitment
-        </p>
+    <section className="bg-cream py-16 sm:py-24">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="max-w-2xl">
+          <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-brand-deep">
+            Why Foodie
+          </p>
+          <h2 className="mt-3 font-display text-3xl font-extrabold text-ink sm:text-4xl">
+            Cooked properly. Delivered properly.
+          </h2>
+          <p className="mt-3 text-base leading-relaxed text-ink-soft">
+            One standard from the farm to your table — no shortcuts, no
+            mystery ingredients.
+          </p>
+        </div>
 
-        {/* បង្ហាញ Feature Cards ជា Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {features.map((item, index) => (
+        <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {features.map((feature) => (
             <div
-              key={index}
-              className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border-2 border-orange-100 group relative overflow-hidden"
+              key={feature.title}
+              className="rounded-2xl border border-line bg-white p-6 shadow-card transition-colors duration-200 hover:border-brand/40"
             >
-              {/* Background Gradient Effect */}
-              <div className={`absolute inset-0 bg-gradient-to-br ${item.bg} opacity-0 group-hover:opacity-100 transition-opacity duration-300`}></div>
-              
-              {/* Icon Container */}
-              <div className={`relative w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br ${item.bg} flex items-center justify-center shadow-md group-hover:scale-110 transition-transform duration-300`}>
-                {item.icon}
-              </div>
-              
-              {/* Content */}
-              <div className="relative z-10">
-                <h3 className="text-lg font-bold text-gray-900 mb-3 group-hover:text-orange-600 transition-colors duration-300">
-                  {item.title}
-                </h3>
-                <p className="text-gray-600 text-sm leading-relaxed">
-                  {item.desc}
-                </p>
-              </div>
-              
-              {/* Decorative Corner */}
-              <div className={`absolute -top-8 -right-8 w-24 h-24 bg-gradient-to-br ${item.color} rounded-full opacity-10 group-hover:opacity-20 transition-opacity duration-300`}></div>
+              <span className="grid h-11 w-11 place-items-center rounded-xl bg-brand-tint text-brand-deep">
+                <feature.icon className="text-xl" aria-hidden="true" />
+              </span>
+              <h3 className="mt-4 text-base font-bold text-ink">
+                {feature.title}
+              </h3>
+              <p className="mt-2 text-sm leading-relaxed text-ink-muted">
+                {feature.desc}
+              </p>
             </div>
           ))}
         </div>

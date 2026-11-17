@@ -1,122 +1,115 @@
 import React, { useContext, useState, useEffect } from "react";
 import { ShopContext } from "./ShopContext";
 import { Link } from "react-router-dom";
-import { FaShoppingCart, FaEye, FaStar } from "react-icons/fa";
+import { FiArrowRight, FiPlus, FiStar } from "react-icons/fi";
 
 const ProductList = () => {
   const { products, addToCart } = useContext(ShopContext);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  // Check if user is logged in
   useEffect(() => {
     const checkLoginStatus = () => {
-      const currentUser = localStorage.getItem('foodie_current_user');
+      const currentUser = localStorage.getItem("foodie_current_user");
       setIsLoggedIn(!!currentUser);
     };
 
     checkLoginStatus();
-    window.addEventListener('storage', checkLoginStatus);
-    
-    return () => window.removeEventListener('storage', checkLoginStatus);
+    window.addEventListener("storage", checkLoginStatus);
+
+    return () => window.removeEventListener("storage", checkLoginStatus);
   }, []);
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-12 sm:py-16">
-      <div className="text-center mb-12">
-        <h2 className="text-3xl sm:text-4xl font-bold text-gray-800 mb-3">
-          🍽️ Our Awesome Dishes
-        </h2>
-        <p className="text-gray-600 text-base sm:text-lg max-w-2xl mx-auto">
-          Discover our delicious selection of handcrafted meals
-        </p>
-      </div>
+    <section className="border-t border-line bg-white py-16 sm:py-24">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-wrap items-end justify-between gap-4">
+          <div className="max-w-xl">
+            <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-brand-deep">
+              Popular this week
+            </p>
+            <h2 className="mt-3 font-display text-3xl font-extrabold text-ink sm:text-4xl">
+              Dishes people keep ordering
+            </h2>
+          </div>
+          <Link
+            to="/datapro"
+            className="group inline-flex items-center gap-1.5 text-sm font-bold text-ink transition-colors hover:text-brand-deep"
+          >
+            View full menu
+            <FiArrowRight className="transition-transform duration-200 group-hover:translate-x-0.5" />
+          </Link>
+        </div>
 
-      {/* Responsive Grid */}
-      <div className="grid gap-6 sm:gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 place-items-center">
-        {products.map((product) => {
-          const { id, image, name, description, price } = product;
+        <div className="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          {products.slice(0, 8).map((product) => {
+            const { id, image, name, description, price, category } = product;
 
-          return (
-            <div
-              key={id}
-              className="bg-white w-full max-w-[320px] shadow-lg rounded-2xl overflow-hidden 
-              hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 
-              border-2 border-orange-100 group relative"
-            >
-              {/* Image with Link */}
-              <div className="relative bg-gradient-to-br from-orange-50 to-amber-50 p-4 overflow-hidden">
-                <Link to={`/product-details/${id}`} className="block">
+            return (
+              <article
+                key={id}
+                className="group flex flex-col overflow-hidden rounded-2xl border border-line bg-white shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-lift"
+              >
+                <Link
+                  to={`/product-details/${id}`}
+                  className="relative block bg-cream p-4"
+                >
                   <img
                     src={image}
                     alt={name}
-                    className="w-full h-56 object-contain group-hover:scale-110 transition-transform duration-500"
+                    loading="lazy"
+                    className="mx-auto h-44 w-full object-contain transition-transform duration-500 group-hover:scale-105"
                   />
+                  <span className="absolute left-3 top-3 rounded-full bg-white/95 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-ink-soft ring-1 ring-line">
+                    {category}
+                  </span>
+                  <span className="absolute right-3 top-3 inline-flex items-center gap-1 rounded-full bg-white/95 px-2 py-1 text-[11px] font-semibold text-ink ring-1 ring-line">
+                    <FiStar className="text-brand" aria-hidden="true" /> 4.5
+                  </span>
                 </Link>
 
-                {/* Floating Price Badge */}
-                <span className="absolute top-3 right-3 bg-gradient-to-r from-orange-500 to-amber-500 
-                text-white text-base font-bold px-4 py-2 rounded-full shadow-xl 
-                backdrop-blur-sm bg-opacity-95 z-10 group-hover:scale-110 transition-transform duration-300">
-                  ${price}
-                </span>
-                
-                {/* Rating Badge */}
-                <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-full shadow-lg flex items-center gap-1">
-                  <FaStar className="text-amber-400 text-sm" />
-                  <span className="text-gray-800 font-semibold text-sm">4.5</span>
-                </div>
-              </div>
-
-              {/* Content */}
-              <div className="p-5 flex flex-col gap-4 bg-gradient-to-b from-white to-orange-50/30">
-                <div className="min-h-[85px]">
-                  <h4 className="text-xl font-bold text-gray-900 mb-2 line-clamp-1 group-hover:text-orange-600 transition-colors duration-300">
-                    {name}
-                  </h4>
-                  <p className="text-gray-600 text-sm leading-relaxed line-clamp-2">
+                <div className="flex flex-1 flex-col p-5">
+                  <h3 className="font-display text-lg font-bold leading-snug text-ink">
+                    <Link
+                      to={`/product-details/${id}`}
+                      className="transition-colors hover:text-brand-deep"
+                    >
+                      {name}
+                    </Link>
+                  </h3>
+                  <p className="mt-1.5 line-clamp-2 text-sm leading-relaxed text-ink-muted">
                     {description}
                   </p>
-                </div>
 
-                {/* Buttons */}
-                <div className="flex gap-2">
-                  {/* View Details Button */}
-                  <Link
-                    to={`/product-details/${id}`}
-                    className="flex-1 py-3 text-center 
-                    bg-gradient-to-r from-orange-100 to-amber-100 text-orange-700 
-                    font-semibold text-sm tracking-wide border-2 border-orange-200
-                    rounded-xl shadow-sm 
-                    hover:from-orange-200 hover:to-amber-200 hover:shadow-md hover:border-orange-300
-                    active:scale-95 
-                    transition-all duration-200 ease-in-out
-                    flex items-center justify-center gap-2"
-                  >
-                    <FaEye className="text-base" />
-                    <span>View</span>
-                  </Link>
+                  <div className="mt-auto flex items-center justify-between gap-3 pt-5">
+                    <p className="font-display text-xl font-bold tabular-nums text-ink">
+                      ${Number(price).toFixed(2)}
+                    </p>
 
-                  {/* Add to Cart Button */}
-                  <button
-                    onClick={() => isLoggedIn && addToCart(product)}
-                    disabled={!isLoggedIn}
-                    className={`flex-[2] py-3 font-semibold text-sm tracking-wide rounded-xl shadow-md transition-all duration-200 ease-in-out flex items-center justify-center gap-2 ${
-                      isLoggedIn
-                        ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white hover:from-orange-600 hover:to-amber-600 hover:shadow-xl active:scale-95 cursor-pointer'
-                        : 'bg-gray-300 text-gray-500 cursor-not-allowed opacity-60'
-                    }`}
-                    title={!isLoggedIn ? "Please login to add items to cart" : "Add to Cart"}
-                  >
-                    <FaShoppingCart className="text-base" />
-                    <span>{isLoggedIn ? 'Add to Cart' : 'Login First'}</span>
-                  </button>
+                    {isLoggedIn ? (
+                      <button
+                        type="button"
+                        onClick={() => addToCart(product)}
+                        className="inline-flex h-10 items-center gap-1.5 rounded-full bg-brand-strong px-4 text-sm font-bold text-white transition-colors hover:bg-brand-deep"
+                      >
+                        <FiPlus className="text-base" aria-hidden="true" />
+                        Add
+                      </button>
+                    ) : (
+                      <Link
+                        to="/user"
+                        className="inline-flex h-10 items-center rounded-full border border-line px-4 text-sm font-bold text-ink transition-colors hover:border-ink/20"
+                      >
+                        Log in
+                      </Link>
+                    )}
+                  </div>
                 </div>
-              </div>
-            </div>
-          );
-        })}
+              </article>
+            );
+          })}
+        </div>
       </div>
-    </div>
+    </section>
   );
 };
 

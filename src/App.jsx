@@ -15,9 +15,9 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 const App = () => {
   return (
-    <div className="app">
+    <div className="app flex min-h-screen flex-col">
       <ToastContainer
-        position="top-right"
+        position="bottom-right"
         autoClose={2500}
         hideProgressBar={false}
         newestOnTop={true}
@@ -30,7 +30,8 @@ const App = () => {
         limit={3}
       />
       <Navbar />
-      <Routes>
+      <main className="flex-1">
+        <Routes>
         {/* Public Route - Login/Signup */}
         <Route path="/user" element={<User />} />
         
@@ -43,7 +44,8 @@ const App = () => {
         <Route path="/datapro" element={<ProtectedRoute><Datapro /></ProtectedRoute>} />
         <Route path="/contact" element={<ProtectedRoute><Contact /></ProtectedRoute>} />
         <Route path="/product-details/:id" element={<ProtectedRoute><ProductDetails /></ProtectedRoute>} />
-      </Routes>
+        </Routes>
+      </main>
       <Footer />
     </div>
   );

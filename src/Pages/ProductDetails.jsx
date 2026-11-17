@@ -2,8 +2,13 @@ import React, { useContext, useState, useEffect } from "react";
 import { ShopContext } from "../components/ShopContext";
 import { useParams, Link } from "react-router-dom";
 import { ProductData } from "../data";
-import { BiCart } from "react-icons/bi";
-import { FaArrowLeft, FaStar, FaShoppingCart } from "react-icons/fa";
+import { FaStar } from "react-icons/fa";
+import {
+  FiArrowLeft,
+  FiCheck,
+  FiShoppingBag,
+  FiTruck,
+} from "react-icons/fi";
 
 const ProductDetails = () => {
   const { addToCart } = useContext(ShopContext);
@@ -16,41 +21,46 @@ const ProductDetails = () => {
   // Check if user is logged in
   useEffect(() => {
     const checkLoginStatus = () => {
-      const currentUser = localStorage.getItem('foodie_current_user');
+      const currentUser = localStorage.getItem("foodie_current_user");
       setIsLoggedIn(!!currentUser);
     };
 
     checkLoginStatus();
-    window.addEventListener('storage', checkLoginStatus);
-    
-    return () => window.removeEventListener('storage', checkLoginStatus);
+    window.addEventListener("storage", checkLoginStatus);
+
+    return () => window.removeEventListener("storage", checkLoginStatus);
   }, []);
 
   useEffect(() => {
     if (product) {
       document.title = `${product.name} - Foodie`;
     } else {
-      document.title = 'Product Not Found - Foodie';
+      document.title = "Product Not Found - Foodie";
     }
   }, [product]);
 
   const handleAddToCart = () => {
     addToCart(product);
-    // Toast notification is handled in ShopContext
   };
 
   if (!product) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-orange-50 to-amber-50 flex items-center justify-center px-4">
-        <div className="max-w-md w-full bg-white rounded-2xl shadow-2xl p-8 text-center border-2 border-orange-100">
-          <div className="text-6xl mb-4">😔</div>
-          <h2 className="text-3xl font-bold mb-4 text-gray-800">Product Not Found</h2>
-          <p className="text-gray-600 mb-6">The product you're looking for doesn't exist or has been removed.</p>
+      <div className="grid min-h-screen place-items-center bg-cream px-4 pt-20">
+        <div className="w-full max-w-md rounded-3xl border border-line bg-white p-8 text-center shadow-card">
+          <span className="mx-auto grid h-16 w-16 place-items-center rounded-full bg-cream text-2xl text-ink-muted">
+            <FiShoppingBag />
+          </span>
+          <h1 className="mt-4 font-display text-2xl font-extrabold text-ink">
+            Dish not found
+          </h1>
+          <p className="mt-2 text-sm text-ink-soft">
+            This dish doesn't exist or has been taken off the menu.
+          </p>
           <Link
-            to="/"
-            className="inline-flex items-center gap-2 bg-gradient-to-r from-orange-500 to-amber-500 text-white px-6 py-3 rounded-xl font-semibold hover:from-orange-600 hover:to-amber-600 hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl"
+            to="/datapro"
+            className="mt-6 inline-flex h-11 items-center gap-2 rounded-full bg-brand-strong px-5 text-sm font-bold text-white transition-colors hover:bg-brand-deep"
           >
-            <FaArrowLeft /> Back to Home
+            <FiArrowLeft /> Back to the menu
           </Link>
         </div>
       </div>
@@ -58,132 +68,132 @@ const ProductDetails = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-orange-50/50 to-amber-50/50 py-8 sm:py-12 px-4">
-      {/* Back Button */}
-      <div className="max-w-6xl mx-auto mb-6 mt-20">
+    <div className="min-h-screen bg-cream px-4 pb-20 pt-28 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-6xl">
         <Link
-          to="/"
-          className="inline-flex items-center gap-2 text-orange-600 font-semibold hover:text-orange-700 transition-colors group"
+          to="/datapro"
+          className="group inline-flex items-center gap-2 text-sm font-bold text-ink-soft transition-colors hover:text-ink"
         >
-          <FaArrowLeft className="group-hover:-translate-x-1 transition-transform" /> Back to Products
+          <FiArrowLeft className="transition-transform duration-200 group-hover:-translate-x-0.5" />
+          Back to the menu
         </Link>
-      </div>
 
-      <div className="max-w-6xl mx-auto">
-        <div className="flex flex-col lg:flex-row items-start gap-8 lg:gap-12 bg-white rounded-2xl shadow-2xl p-6 sm:p-8 lg:p-10 border-2 border-orange-100">
-        {/* LEFT: Image Section */}
-        <div className="flex-1 flex flex-col items-center lg:sticky lg:top-24">
-          <div className="w-full max-w-md bg-gradient-to-br from-orange-50 to-amber-50 rounded-2xl overflow-hidden shadow-xl p-4 border-2 border-orange-200">
-            <img
-              src={mainImage}
-              alt={product.name}
-              className="w-full h-[350px] object-contain transition-transform duration-500 hover:scale-110"
-            />
-          </div>
-
-          {/* Thumbnails */}
-          <div className="flex gap-3 mt-5 flex-wrap justify-center">
-            {[product.image, product.image1, product.image2, product.image3].map(
-              (img, index) =>
-                img && (
-                  <img
-                    key={index}
-                    src={img}
-                    alt={`${product.name}-${index}`}
-                    onClick={() => setMainImage(img)}
-                    className={`w-20 h-20 sm:w-20 sm:h-24 object-contain bg-gradient-to-br from-orange-50 to-amber-50 rounded-xl cursor-pointer border-2 transition-all duration-300 p-2 hover:scale-110 ${
-                      mainImage === img
-                        ? "border-orange-500 ring-2 ring-orange-300 shadow-lg"
-                        : "border-orange-200 hover:border-orange-400 shadow-md"
-                    }`}
-                  />
-                )
-            )}
-          </div>
-        </div>
-
-        {/* RIGHT: Info */}
-        <div className="flex-1 w-full">
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 leading-tight mb-4">
-            {product.name}
-          </h1>
-
-          {/* Rating */}
-          <div className="flex items-center gap-2 mb-4">
-            <div className="flex items-center gap-1">
-              {[1, 2, 3, 4, 5].map((star) => (
-                <FaStar key={star} className="text-amber-400 text-lg" />
-              ))}
+        <div className="mt-6 grid gap-8 rounded-3xl border border-line bg-white p-6 shadow-card sm:p-8 lg:grid-cols-2 lg:gap-12 lg:p-10">
+          {/* Image */}
+          <div className="flex flex-col">
+            <div className="grid h-[20rem] place-items-center rounded-2xl bg-cream p-6 sm:h-[24rem]">
+              <img
+                src={mainImage}
+                alt={product.name}
+                className="h-full w-full object-contain"
+              />
             </div>
-            <span className="text-gray-600 font-medium">(4.5)</span>
-            <span className="text-gray-400">•</span>
-            <span className="text-gray-600">128 reviews</span>
+
+            <div className="mt-4 flex flex-wrap justify-center gap-3">
+              {[product.image, product.image1, product.image2, product.image3].map(
+                (img, index) =>
+                  img && (
+                    <button
+                      key={index}
+                      type="button"
+                      onClick={() => setMainImage(img)}
+                      aria-label={`View ${product.name} image ${index + 1}`}
+                      className={`h-20 w-16 overflow-hidden rounded-xl border-2 bg-cream p-1.5 transition-colors ${
+                        mainImage === img
+                          ? "border-brand"
+                          : "border-line hover:border-brand/50"
+                      }`}
+                    >
+                      <img
+                        src={img}
+                        alt=""
+                        className="h-full w-full object-contain"
+                      />
+                    </button>
+                  )
+              )}
+            </div>
           </div>
 
-          {/* Category Badge */}
-          {product.category && (
-            <div className="inline-block mb-4">
-              <span className="px-4 py-1.5 bg-gradient-to-r from-orange-100 to-amber-100 text-orange-700 rounded-full text-sm font-semibold border-2 border-orange-200">
-                {product.category}
+          {/* Info */}
+          <div>
+            <span className="inline-flex rounded-full bg-brand-tint px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-brand-deep">
+              {product.category}
+            </span>
+
+            <h1 className="mt-3 font-display text-3xl font-extrabold leading-tight text-ink sm:text-4xl">
+              {product.name}
+            </h1>
+
+            <div className="mt-3 flex items-center gap-2 text-sm">
+              <span className="flex items-center gap-0.5">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <FaStar key={star} className="text-brand" />
+                ))}
               </span>
+              <span className="font-semibold text-ink">4.5</span>
+              <span className="text-ink-muted">· 128 reviews</span>
             </div>
-          )}
 
-          {/* Description */}
-          <div className="bg-gradient-to-br from-orange-50/50 to-amber-50/50 rounded-xl p-5 mb-6 border border-orange-100">
-            <h3 className="font-bold text-gray-800 mb-2 text-lg">Description</h3>
-            <p className="text-gray-700 text-base leading-relaxed">
+            <p className="mt-5 text-sm leading-relaxed text-ink-soft">
               {product.description || product.discription}
             </p>
-            <p className="text-gray-600 mt-3 text-sm italic">
-              🍴 This dish is flavorful, easy to enjoy, and perfect for any mealtime.
-            </p>
-          </div>
 
-          {/* Price and Discount */}
-          <div className="bg-white rounded-xl p-5 mb-6 border-2 border-orange-200 shadow-md">
-            <p className="text-gray-500 text-sm mb-1">Regular Price</p>
-            <p className="text-gray-400 text-xl line-through mb-2">
-              ${product.price.toFixed(2)}
-            </p>
-            <div className="flex items-baseline gap-3">
-              <p className="text-orange-600 text-4xl sm:text-5xl font-bold">
-                ${(product.price * 0.9).toFixed(2)}
+            <div className="mt-6 rounded-2xl bg-cream p-5">
+              <div className="flex items-baseline gap-3">
+                <span className="font-display text-3xl font-extrabold tabular-nums text-ink">
+                  ${(product.price * 0.9).toFixed(2)}
+                </span>
+                <span className="text-sm tabular-nums text-ink-muted line-through">
+                  ${Number(product.price).toFixed(2)}
+                </span>
+                <span className="rounded-full bg-brand-tint px-2.5 py-1 text-[11px] font-bold text-brand-deep">
+                  10% off
+                </span>
+              </div>
+              <p className="mt-1 text-sm text-ink-soft">
+                You save ${(product.price * 0.1).toFixed(2)} on this dish.
               </p>
-              <span className="px-3 py-1 bg-gradient-to-r from-red-500 to-red-600 text-white text-sm font-bold rounded-full shadow-md animate-pulse">
-                10% OFF
-              </span>
             </div>
-            <p className="text-green-600 text-sm mt-2 font-medium">✔️ You save ${(product.price * 0.1).toFixed(2)}!</p>
-          </div>
 
-          {/* Buttons */}
-          <button
-            onClick={() => isLoggedIn && handleAddToCart()}
-            disabled={!isLoggedIn}
-            className={`w-full px-6 py-4 rounded-xl font-bold text-lg shadow-lg transition-all duration-300 flex items-center justify-center gap-3 ${
-              isLoggedIn
-                ? 'bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white hover:shadow-xl hover:scale-105 cursor-pointer'
-                : 'bg-gray-300 text-gray-500 cursor-not-allowed opacity-60'
-            }`}
-            title={!isLoggedIn ? "Please login to add items to cart" : "Add to Cart"}
-          >
-            <FaShoppingCart size={24} /> {isLoggedIn ? 'Add to Cart' : 'Login to Add to Cart'}
-          </button>
+            {isLoggedIn ? (
+              <button
+                type="button"
+                onClick={handleAddToCart}
+                className="mt-5 inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-brand-strong text-sm font-bold text-white transition-colors hover:bg-brand-deep"
+              >
+                <FiShoppingBag className="text-lg" /> Add to cart · $
+                {(product.price * 0.9).toFixed(2)}
+              </button>
+            ) : (
+              <Link
+                to="/user"
+                className="mt-5 inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-brand-strong text-sm font-bold text-white transition-colors hover:bg-brand-deep"
+              >
+                Log in to order
+              </Link>
+            )}
 
-          {/* Additional Info */}
-          <div className="mt-6 grid grid-cols-2 gap-4 text-center">
-            <div className="bg-green-50 rounded-xl p-4 border border-green-200">
-              <p className="text-green-600 font-bold text-lg">✓ In Stock</p>
-              <p className="text-gray-600 text-sm mt-1">Ready to ship</p>
-            </div>
-            <div className="bg-blue-50 rounded-xl p-4 border border-blue-200">
-              <p className="text-blue-600 font-bold text-lg">🚚 Free Shipping</p>
-              <p className="text-gray-600 text-sm mt-1">On orders over $50</p>
-            </div>
+            <dl className="mt-5 grid grid-cols-2 gap-3">
+              <div className="rounded-xl border border-line p-4">
+                <dt className="flex items-center gap-2 text-sm font-bold text-ink">
+                  <FiCheck className="text-brand-deep" /> In stock
+                </dt>
+                <dd className="mt-1 text-xs text-ink-muted">
+                  Made when you order
+                </dd>
+              </div>
+              <div className="rounded-xl border border-line p-4">
+                <dt className="flex items-center gap-2 text-sm font-bold text-ink">
+                  <FiTruck className="text-brand-deep" /> Free delivery
+                </dt>
+                <dd className="mt-1 text-xs text-ink-muted">
+                  On orders over $25
+                </dd>
+              </div>
+            </dl>
           </div>
         </div>
-      </div>
       </div>
     </div>
   );
